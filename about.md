@@ -1,6 +1,7 @@
 ---
 layout: home
 title: "主页"
+permalink: /about/
 ---
 
 <section style="text-align:center;">
