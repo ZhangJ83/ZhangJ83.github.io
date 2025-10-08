@@ -1,6 +1,7 @@
 ---
 layout: page
 title: "研究与论文"
+permalink: /research/
 ---
 
 ### 研究方向
