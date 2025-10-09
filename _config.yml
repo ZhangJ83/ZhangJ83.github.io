@@ -1,23 +1,11 @@
-title: "Ying's Academic Homepage"
-description: "个人学术主页 | 博客 | 项目 | 研究"
-baseurl: "" 
-url: "https://你的域名"   # ✅ 例如 https://ying.me
+title: ZhangJ83's Academic Site
+description: "个人网站 | 博客 | 项目 | 研究"
+theme: minima   # GitHub Pages 内置 Jekyll 主题
+markdown: kramdown
+highlighter: rouge
 
-author:
-  name: Ying
-  email: your_email@example.com
-  github: ying123
-  linkedin: https://www.linkedin.com/in/yourname
-  scholar: https://scholar.google.com/citations?user=XXXX
-
-theme: minima  # Jekyll 内置简洁主题
-
-# 导航栏
+# 显示在顶部导航栏的页面
 header_pages:
   - about.md
   - projects.md
   - research.md
-
-# 其他设置
-markdown: kramdown
-highlighter: rouge
