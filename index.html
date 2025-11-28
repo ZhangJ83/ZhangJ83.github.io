@@ -3,74 +3,51 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>欢迎来到我的网站</title>
-  <style>
-    body {
-      font-family: "Microsoft Yahei", sans-serif;
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(120deg, #89f7fe, #66a6ff);
-      color: #333;
-      text-align: center;
-    }
-    header {
-      padding: 60px 20px;
-    }
-    h1 {
-      font-size: 3em;
-      margin-bottom: 10px;
-    }
-    p {
-      font-size: 1.2em;
-    }
-    footer {
-      margin-top: 60px;
-      padding: 20px;
-      font-size: 0.9em;
-      color: #666;
-    }
-    a {
-      color: #0044cc;
-      text-decoration: none;
-    }
-  </style>
+  <title>ZhangJ83 — 学术主页</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
-  <header>
-    <h1>你好，我是 张健宁 👋</h1>
-    <p>欢迎来到我的个人网站！</p>
-    <p>🚀 我会在这里分享学习笔记、项目和想法。</p>
+  <header class="site-header">
+    <div class="site-brand">
+      <h1 class="name">张健宁 (ZhangJ83)</h1>
+      <p class="subtitle">电子信息 · 研究 · 教学资料</p>
+    </div>
+    <nav class="site-nav">
+      <a href="/about.md">关于</a>
+      <a href="/projects.md">项目</a>
+      <a href="/research.md">研究</a>
+      <a href="/courses.md" class="right-link">课程</a>
+      <a href="/forum.md" class="right-link">论坛</a>
+    </nav>
   </header>
-  <footer>
-    <p>© 2025 Ying | <a href="https://github.com/你的用户名">GitHub</a></p>
+
+  <main class="container">
+    <section class="hero">
+      <h2>欢迎 — 研究者 & 学生</h2>
+      <p>这里汇集了我的学术笔记、课程资料与研究成果。你可以浏览课程、下载资料，或在论坛发起讨论。</p>
+      <p class="meta">联系：<a href="mailto:zhang@example.com">zhang@example.com</a> · GitHub: <a href="https://github.com/ZhangJ83">@ZhangJ83</a></p>
+    </section>
+
+    <section class="intro">
+      <h3>简介</h3>
+      <p>当前为中山大学本科在读（电子信息），辅修物理。研究兴趣包括信号处理、机器学习与教育资源共享。</p>
+    </section>
+
+    <section class="highlights">
+      <h3>近期更新</h3>
+      <ul>
+        <li>2025-10-08：发布第一篇博客文章。</li>
+        <li>2025-11-01：添加课程上传与论坛功能（需授权 GitHub Token）。</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2025 张健宁 · 执行学术风格的个人网站 · 基于 GitHub Pages</p>
   </footer>
+
+  <script src="/assets/js/site.js"></script>
 </body>
-
-<body>
-    <!-- 更新时间提示 -->
-    <div class="update-info">以下信息更新于 251009</div>
-    
-    <!--  section标题 -->
-    <h2 class="section-title">主要经历与个人现状</h2>
-    
-    <!-- 外层无序列表 -->
-    <ul class="main-list">
-        <li>
-  (2024.9 - 2028.6 预计)
-  <br>
-  <a href="#">中山大学 电子信息科学与技术本科</a>
-  <br>
-  物理学辅修学士学位在修
-</li>
-
-</body>
-
-<nav>
-  <a href="/about/">关于我</a> |
-  <a href="/projects/">项目展示</a> |
-  <a href="/research/">研究论文</a>
-</nav>
-
 </html>
 
 
