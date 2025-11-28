@@ -3,6 +3,8 @@ description: "个人网站 | 博客 | 项目 | 研究"
 theme: minima   # GitHub Pages 内置 Jekyll 主题
 markdown: kramdown
 highlighter: rouge
+url: "https://ZhangJ83.github.io"
+baseurl: ""
 
 # 显示在顶部导航栏的页面
 header_pages:
