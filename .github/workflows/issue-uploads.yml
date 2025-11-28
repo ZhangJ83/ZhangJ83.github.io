@@ -1,0 +1,64 @@
+name: Upload attachments from Issue
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  contents: write
+
+jobs:
+  upload-from-issue:
+    runs-on: ubuntu-latest
+    # only run when issue indicates an upload
+    if: |
+      startsWith(github.event.issue.title, 'UPLOAD:') || contains(github.event.issue.body, '<!-- upload -->')
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+
+      - name: Prepare uploads dir
+        run: |
+          mkdir -p assets/uploads
+
+      - name: Download attachments and URLs referenced in issue body
+        env:
+          ISSUE_BODY: "${{ github.event.issue.body }}"
+        run: |
+          echo "$ISSUE_BODY" > /tmp/issue_body.txt
+          # find all URLs in the body
+          urls=$(grep -Eo '(https?://[^)\">\']+)' /tmp/issue_body.txt || true)
+          echo "Found URLs: $urls"
+          i=0
+          for u in $urls; do
+            i=$((i+1))
+            fname=$(basename "$u")
+            dest="assets/uploads/$fname"
+            if [ -e "$dest" ]; then
+              dest="assets/uploads/$(date +%s)_$fname"
+            fi
+            echo "Downloading $u -> $dest"
+            curl -L -sS "$u" -o "$dest" || echo "failed to download $u"
+            git add "$dest" || true
+          done
+
+      - name: Commit and push uploaded files
+        run: |
+          if git diff --staged --quiet; then
+            echo "No files added, skipping commit"
+          else
+            git commit -m "Add uploaded files from issue #${{ github.event.issue.number }}"
+            git push
+          fi
+
+      - name: Comment on issue with result
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            感谢你的上传。已尝试将 Issue 中的附件/链接保存到仓库 `assets/uploads/`。
+            如果没有看到文件或有问题，请在此 Issue 中回复。
