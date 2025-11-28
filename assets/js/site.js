@@ -63,6 +63,15 @@
     return resp;
   }
 
+  // Delete a file at path (must exist). Returns API response.
+  async function deleteFile(path, message){
+    const info = await checkFileExists(path);
+    if(!info || !info.sha) throw new Error('File not found');
+    const body = { message: message || `Delete ${path}`, sha: info.sha };
+    const resp = await api(`/repos/${OWNER}/${REPO}/contents/${encodeURIComponent(path)}`, 'DELETE', body);
+    return resp;
+  }
+
   // Forum: list issues (label 'forum')
   async function listThreads(){
     const data = await api(`/repos/${OWNER}/${REPO}/issues?labels=forum&state=open`);
@@ -123,6 +132,7 @@
     setToken,
     getToken,
     uploadFile,
+    deleteFile,
     listThreads,
     createThread
     ,createComment, listPublications, createPublication, saveJSON
