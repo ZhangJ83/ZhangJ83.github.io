@@ -377,7 +377,23 @@ layout: page
           };
           const icon = iconMap[fileext] || '📎';
           
+          // Check if file is previewable
+          const previewable = ['pdf','jpg','jpeg','png','gif'].includes(fileext);
+          
           el.innerHTML = `${icon} <a href="${f}" target="_blank" style="text-decoration:underline;color:var(--primary)">${filename}</a> <span style="color:var(--text-muted);font-size:0.85rem" id="info-${i}">...</span>`;
+          
+          // Add preview button if supported
+          if(previewable){
+            const previewBtn = document.createElement('button');
+            previewBtn.className = 'btn-small';
+            previewBtn.textContent = '👁️ 预览';
+            previewBtn.style.marginLeft = '4px';
+            previewBtn.addEventListener('click', (e)=>{
+              e.preventDefault();
+              showFilePreview(f, fileext, filename);
+            });
+            el.appendChild(previewBtn);
+          }
           
           // Fetch file info async
           (async ()=>{
@@ -414,6 +430,53 @@ layout: page
           }
           filesList.appendChild(el);
         });
+
+        // File preview modal
+        function showFilePreview(filePath, ext, filename){
+          const modal = document.createElement('div');
+          modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:9999;';
+          
+          const content = document.createElement('div');
+          content.style.cssText = 'background:white;border-radius:12px;max-width:90vw;max-height:90vh;overflow:auto;padding:20px;box-shadow:0 10px 40px rgba(0,0,0,0.3);';
+          
+          const closeBtn = document.createElement('button');
+          closeBtn.textContent = '✕ 关闭';
+          closeBtn.className = 'btn btn-secondary';
+          closeBtn.style.marginBottom = '12px';
+          closeBtn.addEventListener('click', ()=>{ modal.remove(); });
+          content.appendChild(closeBtn);
+          
+          const title = document.createElement('h3');
+          title.textContent = filename;
+          title.style.margin = '0 0 12px 0';
+          content.appendChild(title);
+          
+          const previewContainer = document.createElement('div');
+          previewContainer.style.cssText = 'max-width:100%;max-height:70vh;overflow:auto;';
+          
+          if(ext === 'pdf'){
+            // PDF: embed via iframe (using GitHub's PDF viewer)
+            const iframe = document.createElement('iframe');
+            iframe.src = filePath;
+            iframe.style.cssText = 'width:100%;height:600px;border:none;border-radius:8px;';
+            previewContainer.appendChild(iframe);
+          } else if(['jpg','jpeg','png','gif'].includes(ext)){
+            // Image: direct img tag
+            const img = document.createElement('img');
+            img.src = filePath;
+            img.style.cssText = 'max-width:100%;max-height:70vh;border-radius:8px;object-fit:contain;';
+            img.addEventListener('error', ()=>{ previewContainer.innerHTML = '<p style="color:red">图片加载失败</p>'; });
+            previewContainer.appendChild(img);
+          }
+          
+          content.appendChild(previewContainer);
+          modal.appendChild(content);
+          document.body.appendChild(modal);
+          
+          modal.addEventListener('click', (e)=>{
+            if(e.target === modal) modal.remove();
+          });
+        }
 
         // preview toggle
         document.getElementById('toggle-preview').addEventListener('click', ()=>{
