@@ -46,3 +46,23 @@ body{
 
 @media (max-width:640px){.site-header{flex-direction:column;align-items:flex-start}.site-nav{margin-top:8px}}
 
+/* Sidebar / GitBook-like layout */
+.app-shell{display:flex;min-height:100vh}
+.sidebar{width:240px;background:#ffffff;border-right:1px solid #e6edf3;padding:20px;position:sticky;top:0;align-self:flex-start;height:100vh;overflow:auto}
+.sidebar .name{margin:0;font-size:1.2rem}
+.sidebar .subtitle{color:var(--muted);font-size:0.85rem;margin-bottom:12px}
+.sidebar-nav{display:flex;flex-direction:column}
+.sidebar-nav a{padding:8px 10px;color:#0b5cff;text-decoration:none;border-radius:6px;margin-bottom:4px}
+.sidebar-nav a.active{background:#eef6ff}
+.sidebar-footer{margin-top:16px;display:flex;flex-direction:column;gap:8px}
+.main-content{flex:1;padding:28px;max-width:100%;background:var(--bg)}
+.panel{background:var(--card);padding:20px;border-radius:8px;margin-bottom:18px;box-shadow:0 1px 4px rgba(15,23,42,0.04)}
+.panel h3{margin-top:0}
+.pub-summary{margin-bottom:12px}
+
+@media (max-width:900px){
+	.app-shell{flex-direction:column}
+	.sidebar{width:100%;height:auto;position:relative}
+	.main-content{padding:16px}
+}
+

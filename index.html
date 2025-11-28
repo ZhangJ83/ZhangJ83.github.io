@@ -23,32 +23,136 @@
     </nav>
   </header>
 
-  <main class="container">
-    <section class="hero">
-      <h2>欢迎 — 研究者 & 学生</h2>
-      <p>这里汇集了我的学术笔记、课程资料与研究成果。你可以浏览课程、下载资料，或在论坛发起讨论。</p>
-      <p class="meta">联系：<a href="mailto:zhang@example.com">zhang@example.com</a> · GitHub: <a href="https://github.com/ZhangJ83">@ZhangJ83</a></p>
-    </section>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <h1 class="name">张健宁</h1>
+        <p class="subtitle">学术 · 教学 · 研究</p>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#home" class="active">首页</a>
+        <a href="#about">关于</a>
+        <a href="#research">研究</a>
+        <a href="#projects">项目</a>
+        <a href="#publications">出版物</a>
+        <a href="#opencourses">Open Courses</a>
+        <a href="#courses">课程</a>
+        <a href="#blog">博客 / 日志</a>
+        <a href="#forum">论坛</a>
+      </nav>
+      <div class="sidebar-footer">
+        <a class="btn" href="/about.md">关于我</a>
+        <a class="btn" href="https://github.com/ZhangJ83">GitHub</a>
+      </div>
+    </aside>
 
-    <section class="intro">
-      <h3>简介</h3>
-      <p>当前为中山大学本科在读（电子信息），辅修物理。研究兴趣包括信号处理、机器学习与教育资源共享。</p>
-    </section>
+    <main class="main-content">
+      <section id="home" class="panel hero">
+        <h2>欢迎 — 研究者 & 学生</h2>
+        <p>这里汇集了我的学术笔记、课程资料与研究成果。侧栏可直接浏览不同内容模块，页面为单页式展示（类似 GitBook）。</p>
+        <p class="meta">联系：<a href="mailto:zhang@example.com">zhang@example.com</a> · GitHub: <a href="https://github.com/ZhangJ83">@ZhangJ83</a></p>
+      </section>
 
-    <section class="highlights">
-      <h3>近期更新</h3>
-      <ul>
-        <li>2025-10-08：发布第一篇博客文章。</li>
-        <li>2025-11-01：添加课程上传与论坛功能（需授权 GitHub Token）。</li>
-      </ul>
-    </section>
-  </main>
+      <section id="about" class="panel">
+        <h3>关于</h3>
+        <p>当前为中山大学本科在读（电子信息），辅修物理。研究兴趣包括信号处理、机器学习与教育资源共享。</p>
+      </section>
 
-  <footer class="site-footer">
-    <p>© 2025 张健宁 · 执行学术风格的个人网站 · 基于 GitHub Pages</p>
-  </footer>
+      <section id="research" class="panel">
+        <h3>研究</h3>
+        <p>研究方向：信号处理、机器学习在通信与感知中的应用。近期关注可解释模型与教育资源自动化整理。</p>
+        <p><a href="/research.md">更多研究内容 →</a></p>
+      </section>
+
+      <section id="projects" class="panel">
+        <h3>项目</h3>
+        <ul>
+          <li>项目 A：基于深度学习的信号去噪（示例）</li>
+          <li>项目 B：教育资源聚合与自动标注（示例）</li>
+        </ul>
+        <p><a href="/projects.md">查看全部项目 →</a></p>
+      </section>
+
+      <section id="publications" class="panel">
+        <h3>出版物</h3>
+        <p>下面列出示例论文，你也可以到“出版物”页面管理并上传新的论文。</p>
+        <div class="pub-summary">
+          <h4>学习型信号处理导论</h4>
+          <p class="meta">关键词：信号处理, 机器学习</p>
+          <p>摘要：介绍学习型信号处理的基本框架与最新研究进展（占位）。 <a href="/publications/sample-paper-1.md">查看 →</a></p>
+        </div>
+        <div class="pub-summary">
+          <h4>可解释 AI 与伦理考量</h4>
+          <p class="meta">关键词：可解释性, AI伦理</p>
+          <p>摘要：探讨可解释人工智能在实际部署中的伦理与实用问题（占位）。 <a href="/publications/sample-paper-2.md">查看 →</a></p>
+        </div>
+      </section>
+
+      <section id="opencourses" class="panel">
+        <h3>Open Courses（示例）</h3>
+        <p>课程示例：高级算法、机器学习导论、量子计算入门。可在 Open Courses 页面查看详情并上传课程资料。</p>
+        <p><a href="/open-courses.md">进入 Open Courses →</a></p>
+      </section>
+
+      <section id="courses" class="panel">
+        <h3>课程</h3>
+        <p>教学和课程资料聚合区。可上传讲义、练习与代码示例。</p>
+        <p><a href="/courses.md">管理课程资料 →</a></p>
+      </section>
+
+      <section id="blog" class="panel">
+        <h3>博客 / 日志</h3>
+        <ul>
+          <li><a href="/2025/10/08/first-post.html">2025-10-08 · 第一篇博客文章</a></li>
+        </ul>
+      </section>
+
+      <section id="forum" class="panel">
+        <h3>论坛</h3>
+        <p>站点内置论坛入口（基于 GitHub Issues）。点击下方进入独立讨论页或在侧栏直接跳转。</p>
+        <p><a href="/forum.md">去论坛 →</a></p>
+      </section>
+
+      <footer class="site-footer">
+        <p>© 2025 张健宁 · 学术个人网站</p>
+      </footer>
+    </main>
+  </div>
 
   <script src="/assets/js/site.js"></script>
+  <script>
+    // Smooth scrolling and active link highlighting
+    (function(){
+      const links = document.querySelectorAll('.sidebar-nav a');
+      function setActive(anchor){
+        links.forEach(a=>a.classList.remove('active'));
+        anchor.classList.add('active');
+      }
+      links.forEach(a=>{
+        a.addEventListener('click', e=>{
+          e.preventDefault();
+          const id = a.getAttribute('href').slice(1);
+          const target = document.getElementById(id);
+          if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+          setActive(a);
+        });
+      });
+      // Update active on scroll
+      const panels = Array.from(document.querySelectorAll('.panel'));
+      window.addEventListener('scroll', ()=>{
+        let found = null;
+        for(const p of panels){
+          const rect = p.getBoundingClientRect();
+          if(rect.top <= 120 && rect.bottom > 120){ found = p; break; }
+        }
+        if(found){
+          const id = found.id;
+          const a = document.querySelector('.sidebar-nav a[href="#'+id+'"]');
+          if(a) setActive(a);
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
 
