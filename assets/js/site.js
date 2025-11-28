@@ -75,6 +75,40 @@
     return resp;
   }
 
+  // Create a comment on an issue (reply in thread)
+  async function createComment(issueNumber, commentBody){
+    const resp = await api(`/repos/${OWNER}/${REPO}/issues/${issueNumber}/comments`, 'POST', { body: commentBody });
+    return resp;
+  }
+
+  // Publications: list files under publications/ directory
+  async function listPublications(){
+    const data = await api(`/repos/${OWNER}/${REPO}/contents/publications`);
+    if(Array.isArray(data)){
+      // return only markdown files sorted by name (could sort by date)
+      return data.filter(f=>f.name.endsWith('.md')).sort((a,b)=>b.name.localeCompare(a.name));
+    }
+    return [];
+  }
+
+  // Create a publication: upload PDF then create a markdown metadata file in publications/
+  // meta: { title, abstract, keywords (array), categories }
+  async function createPublication(meta, pdfFile){
+    // Upload PDF first
+    const pdfResp = await uploadFile(pdfFile, { overwrite: false, renameOnConflict: true });
+    let pdfPath = '';
+    if(pdfResp && pdfResp.content && pdfResp.content.path) pdfPath = pdfResp.content.path;
+    else if(pdfResp.content && pdfResp.content.sha) pdfPath = `assets/uploads/${pdfFile.name}`;
+
+    const slug = meta.title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'') + '-' + (new Date()).toISOString().slice(0,10);
+    const filename = `publications/${slug}.md`;
+    const front = `---\ntitle: "${meta.title.replace(/"/g,'\"')}"\ndate: ${new Date().toISOString()}\nabstract: "${(meta.abstract||'').replace(/"/g,'\"')}"\nkeywords: [${(meta.keywords||[]).map(k=>`"${k.replace(/"/g,'\"')}"`).join(', ')}]\nfile: /${pdfPath}\ncategories: [${(meta.categories||[]).map(c=>`"${c.replace(/"/g,'\"')}"`).join(', ')}]\n---\n\n`;
+    const content = front + `# ${meta.title}\n\n${meta.abstract || ''}\n`;
+    const body = { message: `Add publication ${meta.title}`, content: btoa(unescape(encodeURIComponent(content))) };
+    const resp = await api(`/repos/${OWNER}/${REPO}/contents/${encodeURIComponent(filename)}`, 'PUT', body);
+    return resp;
+  }
+
   // Expose to window for page scripts
   window.SiteAPI = {
     setToken,
@@ -82,5 +116,6 @@
     uploadFile,
     listThreads,
     createThread
+    ,createComment, listPublications, createPublication
   };
 })();
