@@ -523,6 +523,66 @@ input:focus, textarea:focus, select:focus {
   flex-wrap: wrap;
 }
 
+/* Card cover + icon */
+.card-cover {
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2.2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, rgba(91,124,250,0.9), rgba(116,75,162,0.85));
+}
+
+.card-cover.small {
+  height: 80px;
+  font-size: 1.6rem;
+}
+
+.card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.12);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+/* Hover lift for cover */
+.course-card:hover .card-cover {
+  transform: translateY(-6px) scale(1.02);
+  transition: transform 0.35s cubic-bezier(.2,.9,.2,1);
+}
+
+/* Stronger interactions */
+.course-card .course-card-header h3 { transition: transform 0.25s ease; }
+.course-card:hover .course-card-header h3 { transform: translateY(-4px); }
+
+/* Sidebar collapsed state */
+.courses-app-wrapper.sidebar-collapsed .courses-sidebar {
+  width: 64px !important;
+  transition: width 0.25s ease;
+}
+.courses-app-wrapper.sidebar-collapsed .category-item a { text-align: center; padding-left: 0; }
+.courses-app-wrapper.sidebar-collapsed .cat-label { display: none; }
+.courses-app-wrapper.sidebar-collapsed .cat-icon { font-size: 1.4rem; }
+.courses-app-wrapper.sidebar-collapsed .courses-main-container { margin-left: 8px; }
+
+/* collapse toggle button */
+.sidebar-toggle {
+  position: absolute;
+  left: 16px;
+  top: 18px;
+  z-index: 60;
+}
+
+/* category icon/label split */
+.cat-icon { margin-right: 8px; }
+.cat-label { vertical-align: middle; }
+
 .course-card-actions .btn {
   flex: 1;
   min-width: 100px;

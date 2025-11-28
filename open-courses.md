@@ -5,6 +5,7 @@ layout: page
 
 <div id="courses-app" class="courses-app-wrapper">
   <div class="courses-header">
+    <button id="toggle-sidebar" class="btn btn-small sidebar-toggle" title="折叠/展开侧边栏">☰</button>
     <h1>🎓 开放课程资源库</h1>
     <p>按分类浏览学术课程，管理员可编辑和上传课程资料。</p>
     <div class="admin-panel">
@@ -121,8 +122,12 @@ layout: page
         catEl.className = 'category-item';
         const a = document.createElement('a');
         a.href = '#';
-        a.textContent = cat.title;
         a.dataset.id = cat.id;
+        // split emoji icon and label if title contains a space
+        const parts = (cat.title||'').split(' ');
+        const icon = parts.length>1 ? parts.shift() : parts[0] || '';
+        const label = parts.join(' ') || cat.title;
+        a.innerHTML = `<span class="cat-icon">${icon}</span><span class="cat-label">${label}</span>`;
         a.addEventListener('click', e=>{ e.preventDefault(); renderCourseView(cat, data); setActiveCategory(cat.id); });
         catEl.appendChild(a);
         if(admin){
@@ -170,7 +175,9 @@ layout: page
       cat.courses.forEach(course=>{
         const card = document.createElement('div');
         card.className = 'course-card';
+        // cover + header + desc
         card.innerHTML = `
+          <div class="card-cover" aria-hidden="true"><div class="card-icon">📘</div></div>
           <div class="course-card-header">
             <h3>${course.title}</h3>
             <p class="course-meta">${course.instructor} | ${course.credit} 学分 | ${course.semester}</p>
@@ -338,6 +345,22 @@ layout: page
 
     // Init
     let data = loadData();
+    // sidebar collapsed state persistence
+    const wrapper = document.querySelector('.courses-app-wrapper');
+    const COLLAPSE_KEY = 'courses_sidebar_collapsed';
+    let collapsed = localStorage.getItem(COLLAPSE_KEY) === '1';
+    if(collapsed) wrapper.classList.add('sidebar-collapsed');
+
+    // toggle button
+    const toggleBtn = document.getElementById('toggle-sidebar');
+    if(toggleBtn){
+      toggleBtn.addEventListener('click', ()=>{
+        collapsed = !collapsed;
+        wrapper.classList.toggle('sidebar-collapsed', collapsed);
+        localStorage.setItem(COLLAPSE_KEY, collapsed ? '1' : '0');
+      });
+    }
+
     renderCategories(data);
     if(data.categories.length>0) renderCourseView(data.categories[0], data);
 
