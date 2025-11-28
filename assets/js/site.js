@@ -109,6 +109,15 @@
     return resp;
   }
 
+  // Save arbitrary JSON file to repo (path must be relative, e.g. assets/data/courses.json)
+  async function saveJSON(path, jsonObj, message){
+    const contentStr = JSON.stringify(jsonObj, null, 2);
+    const base64 = btoa(unescape(encodeURIComponent(contentStr)));
+    const body = { message: message || `Update ${path}`, content: base64 };
+    const resp = await api(`/repos/${OWNER}/${REPO}/contents/${encodeURIComponent(path)}`, 'PUT', body);
+    return resp;
+  }
+
   // Expose to window for page scripts
   window.SiteAPI = {
     setToken,
@@ -116,6 +125,6 @@
     uploadFile,
     listThreads,
     createThread
-    ,createComment, listPublications, createPublication
+    ,createComment, listPublications, createPublication, saveJSON
   };
 })();

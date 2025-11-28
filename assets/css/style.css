@@ -60,6 +60,11 @@ body{
 .panel h3{margin-top:0}
 .pub-summary{margin-bottom:12px}
 
+/* courses app specific */
+.courses-app input, .courses-app textarea{font-family:inherit}
+.category-list a{display:block;padding:8px;border-radius:6px;text-decoration:none;color:var(--accent)}
+.category-list button{margin-left:6px}
+
 @media (max-width:900px){
 	.app-shell{flex-direction:column}
 	.sidebar{width:100%;height:auto;position:relative}
