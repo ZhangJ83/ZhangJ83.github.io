@@ -158,6 +158,27 @@ layout: page
       }
     }
 
+    // generate deterministic cover gradient and emoji based on id
+    function hashStr(s){
+      let h = 5381;
+      for(let i=0;i<s.length;i++) h = ((h<<5) + h) + s.charCodeAt(i);
+      return Math.abs(h);
+    }
+
+    function makeCoverStyle(id){
+      const h = hashStr(id+'cover') % 360;
+      const h2 = (h + 25 + (hashStr(id+'b') % 40)) % 360;
+      const s = 62 + (hashStr(id+'s') % 14); // saturation 62-75
+      const l1 = 42 + (hashStr(id+'l') % 8); // lightness ~42-50
+      const l2 = Math.max(28, l1 - 10);
+      return `background: linear-gradient(135deg, hsl(${h} ${s}% ${l1}%), hsl(${h2} ${s}% ${l2}%));`;
+    }
+
+    function getCoverEmoji(id){
+      const pool = ['📘','📗','📙','📕','📒','📚','🧭','🔬','⚙️','🧠','💻','📡'];
+      return pool[hashStr(id+'e') % pool.length];
+    }
+
     function setActiveCategory(id){
       document.querySelectorAll('.category-item a').forEach(a=>{ a.classList.toggle('active', a.dataset.id===id); });
     }
@@ -175,9 +196,12 @@ layout: page
       cat.courses.forEach(course=>{
         const card = document.createElement('div');
         card.className = 'course-card';
+        // compute cover
+        const coverStyle = makeCoverStyle(course.id || (course.title||'').slice(0,6));
+        const emoji = getCoverEmoji(course.id || course.title || 'c');
         // cover + header + desc
         card.innerHTML = `
-          <div class="card-cover" aria-hidden="true"><div class="card-icon">📘</div></div>
+          <div class="card-cover" aria-hidden="true" style="${coverStyle}"><div class="card-icon">${emoji}</div></div>
           <div class="course-card-header">
             <h3>${course.title}</h3>
             <p class="course-meta">${course.instructor} | ${course.credit} 学分 | ${course.semester}</p>
@@ -221,11 +245,14 @@ layout: page
       const main = document.getElementById('courses-main');
       main.innerHTML = '';
       main.className = 'course-detail';
+      const coverStyle = makeCoverStyle(course.id || course.title || 'course');
+      const coverEmoji = getCoverEmoji(course.id || course.title || 'course');
       main.innerHTML = `
         <div class="detail-header">
           <button class="btn btn-secondary" id="back-btn">← 返回列表</button>
         </div>
         <div class="detail-card">
+          <div class="card-cover small" style="${coverStyle}"><div class="card-icon">${coverEmoji}</div></div>
           <h1>${course.title}</h1>
           <div class="detail-meta">
             <span>👨‍🏫 ${course.instructor}</span>
