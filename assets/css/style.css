@@ -551,6 +551,21 @@ input:focus, textarea:focus, select:focus {
   box-shadow: 0 4px 12px rgba(0,0,0,0.12);
 }
 
+/* SVG thumbnail inside cover */
+.cover-thumb {
+  display: block;
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  object-fit: cover;
+}
+
+.cover-thumb.small {
+  width: 48px;
+  height: 48px;
+}
+
 /* Hover lift for cover */
 .course-card:hover .card-cover {
   transform: translateY(-6px) scale(1.02);

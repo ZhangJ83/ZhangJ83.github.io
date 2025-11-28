@@ -179,6 +179,28 @@ layout: page
       return pool[hashStr(id+'e') % pool.length];
     }
 
+    // create an SVG thumbnail (data URI) showing the first character of the title
+    function escapeXml(unsafe){
+      return unsafe.replace(/[&<>"']/g, function(c){
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+      });
+    }
+
+    function makeSVGThumb(title, id){
+      const ch = (title||'')[0] || '?';
+      const base = hashStr(id+'svg') % 360;
+      const sat = 62 + (hashStr(id+'svgs') % 14);
+      const light = 46 + (hashStr(id+'svgl') % 8);
+      const bg = `hsl(${base} ${sat}% ${light}%)`;
+      const fg = '#ffffff';
+      const letter = escapeXml((/\p{L}/u.test(ch) || /[\u4e00-\u9fff]/.test(ch)) ? ch.toUpperCase() : ch.toUpperCase());
+      const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'>`+
+        `<rect rx='18' width='120' height='120' fill='${bg}'/>`+
+        `<text x='50%' y='55%' font-family='system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' font-size='56' fill='${fg}' text-anchor='middle' dominant-baseline='middle'>${letter}</text>`+
+      `</svg>`;
+      return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+    }
+
     function setActiveCategory(id){
       document.querySelectorAll('.category-item a').forEach(a=>{ a.classList.toggle('active', a.dataset.id===id); });
     }
@@ -196,12 +218,12 @@ layout: page
       cat.courses.forEach(course=>{
         const card = document.createElement('div');
         card.className = 'course-card';
-        // compute cover
+        // compute cover (gradient) and svg thumb
         const coverStyle = makeCoverStyle(course.id || (course.title||'').slice(0,6));
-        const emoji = getCoverEmoji(course.id || course.title || 'c');
+        const svgThumb = makeSVGThumb(course.title || course.id || 'C', course.id || course.title || 'c');
         // cover + header + desc
         card.innerHTML = `
-          <div class="card-cover" aria-hidden="true" style="${coverStyle}"><div class="card-icon">${emoji}</div></div>
+          <div class="card-cover" aria-hidden="true" style="${coverStyle}"><img class="cover-thumb" src="${svgThumb}" alt=""></div>
           <div class="course-card-header">
             <h3>${course.title}</h3>
             <p class="course-meta">${course.instructor} | ${course.credit} 学分 | ${course.semester}</p>
@@ -246,13 +268,13 @@ layout: page
       main.innerHTML = '';
       main.className = 'course-detail';
       const coverStyle = makeCoverStyle(course.id || course.title || 'course');
-      const coverEmoji = getCoverEmoji(course.id || course.title || 'course');
+      const svgThumb = makeSVGThumb(course.title || course.id || 'C', course.id || course.title || 'course');
       main.innerHTML = `
         <div class="detail-header">
           <button class="btn btn-secondary" id="back-btn">← 返回列表</button>
         </div>
         <div class="detail-card">
-          <div class="card-cover small" style="${coverStyle}"><div class="card-icon">${coverEmoji}</div></div>
+          <div class="card-cover small" style="${coverStyle}"><img class="cover-thumb small" src="${svgThumb}" alt=""></div>
           <h1>${course.title}</h1>
           <div class="detail-meta">
             <span>👨‍🏫 ${course.instructor}</span>
