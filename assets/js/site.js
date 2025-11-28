@@ -72,6 +72,24 @@
     return resp;
   }
 
+  // Get file information (size, sha, etc) from GitHub API
+  async function getFileInfo(path){
+    try{
+      const info = await checkFileExists(path);
+      if(info){
+        return {
+          size: info.size || 0,
+          path: info.path || path,
+          sha: info.sha,
+          url: info.html_url || info.download_url
+        };
+      }
+    }catch(e){
+      console.warn('Error fetching file info for', path, e);
+    }
+    return null;
+  }
+
   // Forum: list issues (label 'forum')
   async function listThreads(){
     const data = await api(`/repos/${OWNER}/${REPO}/issues?labels=forum&state=open`);
@@ -133,6 +151,7 @@
     getToken,
     uploadFile,
     deleteFile,
+    getFileInfo,
     listThreads,
     createThread
     ,createComment, listPublications, createPublication, saveJSON

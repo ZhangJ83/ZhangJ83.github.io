@@ -365,7 +365,36 @@ layout: page
         filesList.innerHTML = '';
         (sec.files||[]).forEach((f,i)=>{
           const el = document.createElement('div'); el.className = 'material-item';
-          el.innerHTML = `📦 <a href="${f}" target="_blank">${f.split('/').pop()}</a>`;
+          const filename = f.split('/').pop();
+          const fileext = filename.split('.').pop().toLowerCase();
+          
+          // File type icon
+          const iconMap = {
+            'pdf':'📄', 'doc':'📝', 'docx':'📝', 'xls':'📊', 'xlsx':'📊', 
+            'ppt':'🎯', 'pptx':'🎯', 'zip':'📦', 'rar':'📦', '7z':'📦',
+            'jpg':'🖼️', 'jpeg':'🖼️', 'png':'🖼️', 'gif':'🖼️',
+            'mp4':'🎬', 'avi':'🎬', 'mov':'🎬', 'txt':'📄', 'md':'📄'
+          };
+          const icon = iconMap[fileext] || '📎';
+          
+          el.innerHTML = `${icon} <a href="${f}" target="_blank" style="text-decoration:underline;color:var(--primary)">${filename}</a> <span style="color:var(--text-muted);font-size:0.85rem" id="info-${i}">...</span>`;
+          
+          // Fetch file info async
+          (async ()=>{
+            try{
+              const token = SiteAPI.getToken();
+              if(token && f.startsWith('/')){
+                const info = await SiteAPI.getFileInfo(f.replace(/^\//,''));
+                if(info){
+                  const sizeKB = (info.size / 1024).toFixed(1);
+                  const sizeStr = info.size < 1024 ? `${info.size}B` : `${sizeKB}KB`;
+                  const infoEl = document.getElementById(`info-${i}`);
+                  if(infoEl) infoEl.textContent = `(${sizeStr})`;
+                }
+              }
+            }catch(e){ console.warn('Could not fetch file info'); }
+          })();
+          
           if(admin){
             const del = document.createElement('button'); del.className='btn-small'; del.textContent='删除';
             del.addEventListener('click', async ()=>{
@@ -373,7 +402,8 @@ layout: page
               try{
                 const token = SiteAPI.getToken();
                 if(token && f.startsWith('/')){
-                  // remove leading /\n                  await SiteAPI.deleteFile(f.replace(/^\//,''));
+                  // remove leading /
+                  await SiteAPI.deleteFile(f.replace(/^\//,''));
                 }
                 sec.files.splice(i,1);
                 saveLocal(data);
