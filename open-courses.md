@@ -267,79 +267,176 @@ layout: page
       const main = document.getElementById('courses-main');
       main.innerHTML = '';
       main.className = 'course-detail';
-      const coverStyle = makeCoverStyle(course.id || course.title || 'course');
-      const svgThumb = makeSVGThumb(course.title || course.id || 'C', course.id || course.title || 'course');
+
+      // ensure sections structure
+      course.sections = course.sections || {};
+      const keys = ['syllabus','calendar','notes','assignments','exams'];
+      keys.forEach(k=>{ 
+        course.sections[k] = course.sections[k] || { 
+          md: (k==='syllabus' ? (course.syllabus||'') : ''), 
+          files: (course.sections[k] && course.sections[k].files) || [] 
+        }; 
+        // migrate old materials into syllabus if needed
+        if(k==='syllabus' && (!course.sections[k].files.length) && (course.materials||[]).length){
+          course.sections[k].files = course.materials.slice();
+        }
+      });
+
+      // layout: left nav + right content
       main.innerHTML = `
         <div class="detail-header">
           <button class="btn btn-secondary" id="back-btn">← 返回列表</button>
         </div>
-        <div class="detail-card">
-          <div class="card-cover small" style="${coverStyle}"><img class="cover-thumb small" src="${svgThumb}" alt=""></div>
-          <h1>${course.title}</h1>
-          <div class="detail-meta">
-            <span>👨‍🏫 ${course.instructor}</span>
-            <span>⭐ ${course.credit} 学分</span>
-            <span>📅 ${course.semester}开课</span>
+        <div class="detail-card" style="display:flex;gap:18px;align-items:flex-start;">
+          <div class="detail-left" style="min-width:160px;flex:0 0 180px;">
+            <h2 style="margin-top:0">${course.title}</h2>
+            <div class="detail-meta" style="margin-bottom:12px">
+              <div>👨‍🏫 ${course.instructor}</div>
+              <div>⭐ ${course.credit} 学分</div>
+              <div>📅 ${course.semester}</div>
+            </div>
+            <nav id="section-nav" style="display:flex;flex-direction:column;gap:8px"></nav>
           </div>
-          <p>${course.description || course.desc}</p>
-          
-          <section class="detail-section">
-            <h3>📚 教学大纲</h3>
-            <pre class="syllabus-content">${course.syllabus}</pre>
-            ${admin ? '<button class="btn btn-secondary" id="edit-syllabus">编辑大纲</button>' : ''}
-            ${admin ? '<input type="file" id="upload-syllabus" accept=".pdf,.doc,.docx" style="display:none">' : ''}
-          </section>
-
-          <section class="detail-section">
-            <h3>📄 课程资源</h3>
-            <div class="resources-list">
-              ${(course.resources||[]).map(r=>`<div class="resource-item">📎 ${r}</div>`).join('')}
-            </div>
-            ${admin ? '<button class="btn btn-secondary" id="add-resource">➕ 添加资源</button>' : ''}
-          </section>
-
-          <section class="detail-section">
-            <h3>📥 课程资料</h3>
-            <div class="materials-list">
-              ${(course.materials||[]).map((m,i)=>`<div class="material-item">📦 <a href="${m}">${m.split('/').pop()}</a> <button class="btn-small" data-idx="${i}">删除</button></div>`).join('')}
-            </div>
-            <div style="margin-top:12px">
-              <input type="file" id="upload-material" multiple accept=".pdf,.zip,.docx,.xlsx,.pptx,.txt">
-              <button class="btn btn-primary" id="upload-btn" style="margin-left:8px">📤 上传资料</button>
-            </div>
-          </section>
+          <div class="detail-right" style="flex:1;min-width:0">
+            <div id="section-content"></div>
+          </div>
         </div>
       `;
-      
+
       document.getElementById('back-btn').addEventListener('click', ()=>{ renderCourseView(cat, data); });
-      
-      if(admin){
-        document.getElementById('edit-syllabus').addEventListener('click', ()=>{
-          const newSyl = prompt('编辑教学大纲:', course.syllabus);
-          if(newSyl!==null){ course.syllabus = newSyl; saveLocal(data); renderCourseDetail(course, cat, data); }
-        });
-        document.getElementById('add-resource').addEventListener('click', ()=>{
-          const res = prompt('添加资源名称:');
-          if(res){ (course.resources=course.resources||[]).push(res); saveLocal(data); renderCourseDetail(course, cat, data); }
-        });
-        document.querySelectorAll('.material-item .btn-small').forEach(btn=>{ btn.addEventListener('click', (e)=>{ const idx=parseInt(e.target.dataset.idx); (course.materials||[]).splice(idx,1); saveLocal(data); renderCourseDetail(course, cat, data); }); });
+
+      const nav = document.getElementById('section-nav');
+      const content = document.getElementById('section-content');
+
+      // helper: simple markdown -> HTML renderer
+      function renderMarkdown(md){
+        if(!md) return '<p><em>空内容</em></p>';
+        let out = md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        // code blocks
+        out = out.replace(/```([\s\S]*?)```/g, function(m,code){ return '<pre><code>'+code.replace(/</g,'&lt;')+'</code></pre>'; });
+        // headings
+        out = out.replace(/^###### (.*$)/gim,'<h6>$1</h6>');
+        out = out.replace(/^##### (.*$)/gim,'<h5>$1</h5>');
+        out = out.replace(/^#### (.*$)/gim,'<h4>$1</h4>');
+        out = out.replace(/^### (.*$)/gim,'<h3>$1</h3>');
+        out = out.replace(/^## (.*$)/gim,'<h2>$1</h2>');
+        out = out.replace(/^# (.*$)/gim,'<h1>$1</h1>');
+        // bold / italic
+        out = out.replace(/\*\*(.*?)\*\*/gim,'<strong>$1</strong>');
+        out = out.replace(/\*(.*?)\*/gim,'<em>$1</em>');
+        // links
+        out = out.replace(/\[([^\]]+)\]\(([^\)]+)\)/gim,'<a href="$2" target="_blank">$1</a>');
+        // ul
+        out = out.replace(/^\s*[-\*] (.*$)/gim,'<li>$1</li>');
+        out = out.replace(/(<li>.*<\/li>)/gim, '<ul>$1</ul>');
+        // paragraphs
+        out = out.replace(/(^|\n)([^<\n][^\n]*)(\n|$)/gim,function(m,p1,p2){ if(/^\s*<\/?(h\d|ul|pre|li|p|blockquote)/.test(p2)) return m; return '<p>'+p2+'</p>'; });
+        return out;
       }
 
-      document.getElementById('upload-btn').addEventListener('click', async ()=>{
-        const files = document.getElementById('upload-material').files;
-        if(!files.length){ alert('请选择文件'); return; }
-        for(let f of files){
-          try{
-            const token = SiteAPI.getToken();
-            if(token){
-              const resp = await SiteAPI.uploadFile(f, {overwrite:false, renameOnConflict:true});
-              if(resp && resp.content && resp.content.path){ (course.materials=course.materials||[]).push('/'+resp.content.path); }
-            } else { alert('未检测到GitHub Token，请先设置Token'); return; }
-          }catch(e){ alert('上传失败:'+e.message); }
+      // render a specific section
+      function showSection(key){
+        const sec = course.sections[key] || { md:'', files:[] };
+        content.innerHTML = `
+          <div style="display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <h3 style="margin:0;text-transform:capitalize">${key}</h3>
+            <div>
+              ${admin ? '<button id="save-md" class="btn btn-primary">保存 Markdown</button>' : ''}
+              <button id="toggle-preview" class="btn btn-secondary">预览</button>
+            </div>
+          </div>
+          <div id="md-editor-area">
+            <textarea id="md-editor" style="width:100%;min-height:220px;padding:12px;border-radius:8px;border:1px solid var(--border);font-family:inherit;">${sec.md||''}</textarea>
+          </div>
+          <div id="md-preview" style="display:none;margin-top:12px;padding:12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);min-height:120px"></div>
+
+          <div style="margin-top:18px">
+            <h4>文件管理</h4>
+            <div id="files-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:8px"></div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <input type="file" id="section-upload" multiple>
+              <button id="upload-files" class="btn btn-primary">上传文件</button>
+            </div>
+          </div>
+        `;
+
+        // fill files list
+        const filesList = document.getElementById('files-list');
+        filesList.innerHTML = '';
+        (sec.files||[]).forEach((f,i)=>{
+          const el = document.createElement('div'); el.className = 'material-item';
+          el.innerHTML = `📦 <a href="${f}" target="_blank">${f.split('/').pop()}</a>`;
+          if(admin){
+            const del = document.createElement('button'); del.className='btn-small'; del.textContent='删除';
+            del.addEventListener('click', async ()=>{
+              if(!confirm('确认删除此文件并从课程中移除？')) return;
+              try{
+                const token = SiteAPI.getToken();
+                if(token && f.startsWith('/')){
+                  // remove leading /\n                  await SiteAPI.deleteFile(f.replace(/^\//,''));
+                }
+                sec.files.splice(i,1);
+                saveLocal(data);
+                showSection(key);
+              }catch(e){ alert('删除失败:'+e.message); }
+            });
+            el.appendChild(del);
+          }
+          filesList.appendChild(el);
+        });
+
+        // preview toggle
+        document.getElementById('toggle-preview').addEventListener('click', ()=>{
+          const ed = document.getElementById('md-editor');
+          const pr = document.getElementById('md-preview');
+          if(pr.style.display==='none'){
+            pr.innerHTML = renderMarkdown(ed.value);
+            pr.style.display = 'block';
+          } else { pr.style.display='none'; }
+        });
+
+        if(admin){
+          document.getElementById('save-md').addEventListener('click', ()=>{
+            const v = document.getElementById('md-editor').value;
+            sec.md = v;
+            // keep backwards compatibility
+            if(key==='syllabus') course.syllabus = v;
+            saveLocal(data);
+            alert('已保存到本地 (若已设置 GitHub Token，可点击顶部“保存更改”同步到仓库)');
+          });
+
+          document.getElementById('upload-files').addEventListener('click', async ()=>{
+            const input = document.getElementById('section-upload');
+            const files = input.files; if(!files.length){ alert('请选择文件'); return; }
+            for(let f of files){
+              try{
+                const token = SiteAPI.getToken();
+                if(token){
+                  const resp = await SiteAPI.uploadFile(f, { overwrite:false, renameOnConflict:true });
+                  if(resp && resp.content && resp.content.path) sec.files.push('/'+resp.content.path);
+                } else {
+                  alert('未检测到 GitHub Token，请先设置 Token 才能上传到仓库');
+                  break;
+                }
+              }catch(e){ alert('上传失败:'+e.message); }
+            }
+            saveLocal(data);
+            showSection(key);
+          });
         }
-        saveLocal(data);
-        renderCourseDetail(course, cat, data);
+      }
+
+      // build nav
+      keys.forEach((k,i)=>{
+        const b = document.createElement('button');
+        b.className = 'btn'; b.textContent = k.charAt(0).toUpperCase() + k.slice(1);
+        b.addEventListener('click', ()=>{ showSection(k); document.querySelectorAll('#section-nav .btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); });
+        if(i===0) b.classList.add('active');
+        nav.appendChild(b);
       });
+
+      // show default
+      showSection('syllabus');
     }
 
     function renderCourseEdit(course, cat, data){
