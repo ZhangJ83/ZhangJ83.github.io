@@ -378,7 +378,7 @@ layout: page
           const icon = iconMap[fileext] || '📎';
           
           // Check if file is previewable
-          const previewable = ['pdf','jpg','jpeg','png','gif'].includes(fileext);
+          const previewable = ['pdf','jpg','jpeg','png','gif','txt','md','markdown','csv'].includes(fileext);
           
           el.innerHTML = `${icon} <a href="${f}" target="_blank" style="text-decoration:underline;color:var(--primary)">${filename}</a> <span style="color:var(--text-muted);font-size:0.85rem" id="info-${i}">...</span>`;
           
@@ -467,6 +467,38 @@ layout: page
             img.style.cssText = 'max-width:100%;max-height:70vh;border-radius:8px;object-fit:contain;';
             img.addEventListener('error', ()=>{ previewContainer.innerHTML = '<p style="color:red">图片加载失败</p>'; });
             previewContainer.appendChild(img);
+          } else if(['txt','md','markdown','csv'].includes(ext)){
+            // Text files: fetch and display
+            const loadingMsg = document.createElement('p');
+            loadingMsg.textContent = '加载中...';
+            previewContainer.appendChild(loadingMsg);
+            
+            fetch(filePath)
+              .then(res=>{
+                if(!res.ok) throw new Error('加载失败');
+                return res.text();
+              })
+              .then(text=>{
+                previewContainer.innerHTML = '';
+                
+                if(ext === 'md' || ext === 'markdown'){
+                  // Render Markdown
+                  const rendered = renderMarkdown(text);
+                  const mdDiv = document.createElement('div');
+                  mdDiv.innerHTML = rendered;
+                  mdDiv.style.cssText = 'font-size:0.95rem;line-height:1.6;color:var(--text);';
+                  previewContainer.appendChild(mdDiv);
+                } else {
+                  // Plain text or CSV
+                  const pre = document.createElement('pre');
+                  pre.textContent = text;
+                  pre.style.cssText = 'background:var(--bg);padding:12px;border-radius:8px;overflow-x:auto;font-size:0.9rem;line-height:1.5;color:var(--text);max-width:100%;';
+                  previewContainer.appendChild(pre);
+                }
+              })
+              .catch(err=>{
+                previewContainer.innerHTML = '<p style="color:red">加载失败：' + err.message + '</p>';
+              });
           }
           
           content.appendChild(previewContainer);
