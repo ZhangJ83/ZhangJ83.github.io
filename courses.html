@@ -506,6 +506,14 @@ title: Courses
       <aside class="sidebar">
         <h3>📂 Categories</h3>
         <ul class="category-list" id="categoryList"></ul>
+        
+        <!-- 新建分类表单（仅管理员可见） -->
+        <div id="addCategoryForm" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--border);">
+          <div class="form-group" style="margin-bottom: 10px;">
+            <input type="text" id="newCategoryInput" placeholder="New category name..." style="width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.9rem;">
+          </div>
+          <button onclick="addCategory()" style="width: 100%; padding: 8px; background: var(--secondary); color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500; margin-bottom: 8px;">➕ Add Category</button>
+        </div>
       </aside>
 
       <!-- 右侧课程显示区 -->
@@ -526,6 +534,12 @@ title: Courses
           <div class="form-group">
             <label>Course Title:</label>
             <input type="text" id="newCourseTitle" placeholder="Course Title" required>
+          </div>
+          <div class="form-group">
+            <label>Category:</label>
+            <select id="newCourseCategory" required>
+              <option value="">Select a category</option>
+            </select>
           </div>
         </div>
         <div class="form-group">
@@ -724,8 +738,10 @@ title: Courses
 
     // 获取所有独特分类
     function getCategories() {
-      const categories = [...new Set(coursesData.map(c => c.category))];
-      return ['All', ...categories.sort()];
+      const courseCategories = [...new Set(coursesData.map(c => c.category))];
+      const customCategories = JSON.parse(localStorage.getItem('courseCategories') || '[]');
+      const allCategories = [...new Set([...courseCategories, ...customCategories])];
+      return ['All', ...allCategories.sort()];
     }
 
     // 渲染分类按钮
@@ -736,15 +752,97 @@ title: Courses
       getCategories().forEach(category => {
         const li = document.createElement('li');
         li.className = 'category-item' + (category === currentCategory ? ' active' : '');
-        li.textContent = category;
-        li.onclick = () => {
+        
+        // 创建分类项容器
+        const categoryContainer = document.createElement('div');
+        categoryContainer.style.display = 'flex';
+        categoryContainer.style.justifyContent = 'space-between';
+        categoryContainer.style.alignItems = 'center';
+        categoryContainer.style.width = '100%';
+        
+        // 分类名称
+        const categoryName = document.createElement('span');
+        categoryName.textContent = category;
+        categoryName.style.flex = '1';
+        categoryName.style.cursor = 'pointer';
+        categoryName.onclick = (e) => {
+          e.stopPropagation();
           currentCategory = category;
           filterAndSearch();
           document.querySelectorAll('.category-item').forEach(item => item.classList.remove('active'));
           li.classList.add('active');
         };
+        
+        categoryContainer.appendChild(categoryName);
+        
+        // 删除按钮（仅管理员和非"All"分类可见）
+        if (localStorage.getItem('adminMode') === 'true' && category !== 'All') {
+          const deleteBtn = document.createElement('button');
+          deleteBtn.textContent = '✕';
+          deleteBtn.style.background = 'transparent';
+          deleteBtn.style.border = 'none';
+          deleteBtn.style.color = '#e74c3c';
+          deleteBtn.style.cursor = 'pointer';
+          deleteBtn.style.fontSize = '1.2rem';
+          deleteBtn.style.padding = '0';
+          deleteBtn.style.width = '24px';
+          deleteBtn.style.height = '24px';
+          deleteBtn.style.marginLeft = '8px';
+          deleteBtn.onclick = (e) => {
+            e.stopPropagation();
+            deleteCategory(category);
+          };
+          categoryContainer.appendChild(deleteBtn);
+        }
+        
+        li.appendChild(categoryContainer);
         categoryList.appendChild(li);
       });
+    }
+
+    // 新建分类
+    function addCategory() {
+      const input = document.getElementById('newCategoryInput');
+      const newCategory = input.value.trim();
+      
+      if (!newCategory) {
+        alert('⚠️ Please enter a category name');
+        return;
+      }
+      
+      if (getCategories().includes(newCategory)) {
+        alert('⚠️ Category already exists');
+        return;
+      }
+      
+      // 存储新分类到 localStorage
+      let categories = JSON.parse(localStorage.getItem('courseCategories') || '[]');
+      categories.push(newCategory);
+      localStorage.setItem('courseCategories', JSON.stringify(categories));
+      
+      input.value = '';
+      renderCategories();
+      alert('✅ Category added successfully!');
+    }
+
+    // 删除分类
+    function deleteCategory(category) {
+      const coursesInCategory = coursesData.filter(c => c.category === category).length;
+      
+      if (coursesInCategory > 0) {
+        alert(`⚠️ Cannot delete category with ${coursesInCategory} course(s). Please reassign or delete courses first.`);
+        return;
+      }
+      
+      if (confirm(`Delete category "${category}"?`)) {
+        // 从 localStorage 中删除
+        let categories = JSON.parse(localStorage.getItem('courseCategories') || '[]');
+        categories = categories.filter(c => c !== category);
+        localStorage.setItem('courseCategories', JSON.stringify(categories));
+        
+        renderCategories();
+        alert('✅ Category deleted successfully!');
+      }
     }
 
     // 按编号排序和筛选课程
@@ -882,6 +980,7 @@ title: Courses
         id: coursesData.length + 1,
         code: document.getElementById('newCourseCode').value,
         title: document.getElementById('newCourseTitle').value,
+        category: document.getElementById('newCourseCategory').value,
         semester: 'Spring 2025',
         units: 3,
         instructor: 'Zhang Jun',
@@ -895,7 +994,20 @@ title: Courses
       coursesData.push(newCourse);
       alert('✅ Course added!');
       event.target.reset();
+      renderCategories();
       renderCourses();
+    }
+
+    // 更新分类选择框
+    function updateCategorySelect() {
+      const select = document.getElementById('newCourseCategory');
+      select.innerHTML = '<option value="">Select a category</option>';
+      getCategories().slice(1).forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        select.appendChild(option);
+      });
     }
 
     function openAdminModal() {
@@ -918,6 +1030,8 @@ title: Courses
 
     if (localStorage.getItem('adminMode') === 'true') {
       document.getElementById('adminSection').style.display = 'block';
+      document.getElementById('addCategoryForm').style.display = 'block';
+      updateCategorySelect();
     }
 
     renderCategories();
