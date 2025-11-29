@@ -520,19 +520,29 @@ layout: page
           } else { pr.style.display='none'; }
         });
 
-        if(admin){
-          document.getElementById('save-md').addEventListener('click', ()=>{
+        // Save markdown - always attach listener, check admin inside
+        const saveMdBtn = document.getElementById('save-md');
+        if(saveMdBtn){
+          saveMdBtn.addEventListener('click', ()=>{
+            if(!admin){ alert('需要管理员权限'); return; }
             const v = document.getElementById('md-editor').value;
             sec.md = v;
             // keep backwards compatibility
             if(key==='syllabus') course.syllabus = v;
             saveLocal(data);
-            alert('已保存到本地 (若已设置 GitHub Token，可点击顶部“保存更改”同步到仓库)');
+            alert('已保存到本地 (若已设置 GitHub Token，可点击顶部"保存更改"同步到仓库)');
           });
+        }
 
-          document.getElementById('upload-files').addEventListener('click', async ()=>{
+        // Upload files - always attach listener, check admin inside
+        const uploadBtn = document.getElementById('upload-files');
+        if(uploadBtn){
+          uploadBtn.addEventListener('click', async ()=>{
+            if(!admin){ alert('需要管理员权限'); return; }
             const input = document.getElementById('section-upload');
             const files = input.files; if(!files.length){ alert('请选择文件'); return; }
+            uploadBtn.disabled = true;
+            uploadBtn.textContent = '上传中...';
             for(let f of files){
               try{
                 const token = SiteAPI.getToken();
@@ -545,6 +555,8 @@ layout: page
                 }
               }catch(e){ alert('上传失败:'+e.message); }
             }
+            uploadBtn.disabled = false;
+            uploadBtn.textContent = '上传文件';
             saveLocal(data);
             showSection(key);
           });
