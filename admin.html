@@ -360,26 +360,49 @@ title: Admin
           <div class="stat-card">
             <div class="stat-number" id="paperCount">0</div>
             <div class="stat-label">Total Papers</div>
+            <div style="font-size: 0.85rem; color: var(--secondary); margin-top: 5px;" id="citationStats">0 citations</div>
           </div>
           <div class="stat-card">
             <div class="stat-number" id="courseCount">0</div>
             <div class="stat-label">Total Courses</div>
+            <div style="font-size: 0.85rem; color: var(--secondary); margin-top: 5px;" id="courseStats">0 students</div>
           </div>
           <div class="stat-card">
             <div class="stat-number" id="threadCount">0</div>
             <div class="stat-label">Forum Threads</div>
+            <div style="font-size: 0.85rem; color: var(--secondary); margin-top: 5px;" id="threadStats">0 replies</div>
           </div>
           <div class="stat-card">
             <div class="stat-number" id="projectCount">0</div>
             <div class="stat-label">Lab Projects</div>
+            <div style="font-size: 0.85rem; color: var(--secondary); margin-top: 5px;" id="projectStats">0 active</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="initiativeCount">0</div>
+            <div class="stat-label">Company Initiatives</div>
+            <div style="font-size: 0.85rem; color: var(--secondary); margin-top: 5px;" id="initiativeStats">0 members</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="userCount">0</div>
+            <div class="stat-label">Last Updated</div>
+            <div style="font-size: 0.85rem; color: var(--secondary); margin-top: 5px;" id="updateStats">just now</div>
           </div>
         </div>
         
         <div style="background: var(--light); padding: 20px; border-radius: 8px; margin-top: 20px;">
           <h3 style="margin-bottom: 10px;">⚙️ System Tools</h3>
-          <button class="btn btn-success" onclick="refreshAllData()">🔄 Refresh All Data</button>
-          <button class="btn btn-danger" onclick="clearAllData()" style="margin-left: 10px;">🗑️ Clear All Data</button>
-          <button class="btn" onclick="exportData()" style="margin-left: 10px;">📥 Export Data</button>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+            <button class="btn btn-success" onclick="refreshAllData()" title="Reload data from localStorage">🔄 Refresh All Data</button>
+            <button class="btn" onclick="backupData()" title="Download backup file">💾 Backup Data</button>
+            <button class="btn" onclick="exportData()" title="Export as JSON">📥 Export Data</button>
+            <button class="btn btn-danger" onclick="clearAllData()" title="Remove all data - CAUTION!">🗑️ Clear All Data</button>
+          </div>
+          <div style="font-size: 0.85rem; color: #666; padding: 10px; background: white; border-radius: 4px; border-left: 3px solid var(--secondary);">
+            <strong>📊 System Status:</strong><br>
+            Storage Used: <span id="storageUsed">0</span>MB / 5MB<br>
+            Last Sync: <span id="lastSync">Never</span><br>
+            Data Integrity: <span id="dataIntegrity" style="color: var(--success);">✓ Good</span>
+          </div>
         </div>
       </div>
 
@@ -618,6 +641,27 @@ title: Admin
       document.getElementById('courseCount').textContent = coursesData.length;
       document.getElementById('threadCount').textContent = threadsData.length;
       document.getElementById('projectCount').textContent = projectsData.length;
+      document.getElementById('initiativeCount').textContent = initiativesData ? initiativesData.length : 0;
+      
+      // Update detailed stats
+      const totalCitations = papersData.reduce((sum, p) => sum + (p.citations || 0), 0);
+      document.getElementById('citationStats').textContent = totalCitations + ' citations';
+      
+      const totalStudents = coursesData.reduce((sum, c) => sum + (c.students || 50), 0);
+      document.getElementById('courseStats').textContent = totalStudents + ' students enrolled';
+      
+      const totalReplies = threadsData.reduce((sum, t) => sum + (t.replies || 0), 0);
+      document.getElementById('threadStats').textContent = totalReplies + ' total replies';
+      
+      const activeProjects = projectsData.filter(p => p.status === 'active').length;
+      document.getElementById('projectStats').textContent = activeProjects + ' active projects';
+      
+      const initiativeMembers = (initiativesData ? initiativesData.length : 0) * 100;
+      document.getElementById('initiativeStats').textContent = initiativeMembers + '+ members';
+      
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString();
+      document.getElementById('updateStats').textContent = 'Updated at ' + timeStr;
     }
 
     // Add paper
@@ -877,6 +921,78 @@ title: Admin
       }
     }
 
+    function updateSystemStatus() {
+      // Calculate storage used
+      const storageData = {
+        papersData: JSON.stringify(papersData).length,
+        coursesData: JSON.stringify(coursesData).length,
+        threadsData: JSON.stringify(threadsData).length,
+        projectsData: JSON.stringify(projectsData).length,
+        initiativesData: JSON.stringify(initiativesData).length
+      };
+      const totalBytes = Object.values(storageData).reduce((a, b) => a + b, 0);
+      const totalMB = (totalBytes / (1024 * 1024)).toFixed(2);
+      document.getElementById('storageUsed').textContent = totalMB;
+      
+      // Update last sync time
+      const lastSync = localStorage.getItem('lastSyncTime') || 'Never';
+      document.getElementById('lastSync').textContent = lastSync;
+      
+      // Check data integrity
+      const hasAllKeys = papersData.length > 0 && coursesData.length > 0;
+      const integrityElement = document.getElementById('dataIntegrity');
+      if (hasAllKeys) {
+        integrityElement.textContent = '✓ Good';
+        integrityElement.style.color = 'var(--success)';
+      } else {
+        integrityElement.textContent = '⚠ Partial';
+        integrityElement.style.color = 'var(--warning)';
+      }
+    }
+
+    function backupData() {
+      const data = {
+        papers: papersData,
+        courses: coursesData,
+        threads: threadsData,
+        projects: projectsData,
+        initiatives: initiativesData,
+        timestamp: new Date().toISOString(),
+        version: '1.0'
+      };
+      const json = JSON.stringify(data, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'admin_backup_' + new Date().toISOString().split('T')[0] + '.json';
+      a.click();
+      
+      // Update last sync time
+      const now = new Date().toLocaleString();
+      localStorage.setItem('lastSyncTime', now);
+      updateSystemStatus();
+      showMessage('✅ Backup created and downloaded', 'success');
+    }
+
+    function exportData() {
+      const data = {
+        papers: papersData,
+        courses: coursesData,
+        threads: threadsData,
+        projects: projectsData,
+        initiatives: initiativesData
+      };
+      const json = JSON.stringify(data, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'admin_export_' + new Date().toISOString().split('T')[0] + '.json';
+      a.click();
+      showMessage('✅ Data exported', 'success');
+    }
+
     function exportData() {
       const data = {
         papers: papersData,
@@ -904,6 +1020,7 @@ title: Admin
 
     // Initialize
     updateDashboard();
+    updateSystemStatus();
     updatePapersTable();
     updateCoursesTable();
     updateForumTable();

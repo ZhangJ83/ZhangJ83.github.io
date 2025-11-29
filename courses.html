@@ -103,6 +103,82 @@ title: Courses
       margin-bottom: 10px;
     }
     
+    .page-header p {
+      font-size: 1.1rem;
+      color: #666;
+    }
+
+    .courses-wrapper {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 30px;
+    }
+
+    .search-bar {
+      margin-bottom: 20px;
+      width: 100%;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    .search-bar input:focus {
+      outline: none;
+      border-color: var(--secondary);
+    }
+
+    .sidebar {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      height: fit-content;
+      position: sticky;
+      top: 90px;
+    }
+
+    .sidebar h3 {
+      color: var(--primary);
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+
+    .category-list {
+      list-style: none;
+    }
+
+    .category-item {
+      padding: 12px 15px;
+      margin-bottom: 8px;
+      background: #f8f9fa;
+      border-left: 3px solid transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 0.95rem;
+    }
+
+    .category-item:hover {
+      background: #ecf0f1;
+    }
+
+    .category-item.active {
+      background: var(--secondary);
+      color: white;
+      border-left-color: var(--accent);
+    }
+
+    .courses-content {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+
     .courses-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -113,71 +189,84 @@ title: Courses
     .course-card {
       background: white;
       border-radius: 8px;
-      overflow: hidden;
       box-shadow: var(--shadow);
+      overflow: hidden;
       transition: transform 0.3s, box-shadow 0.3s;
       cursor: pointer;
-    }
-    
-    .course-card:hover {
+    }    .course-card:hover {
       transform: translateY(-8px);
       box-shadow: 0 8px 24px rgba(0,0,0,0.15);
     }
     
     .course-header {
-      background: linear-gradient(135deg, var(--secondary) 0%, #2980b9 100%);
-      padding: 20px;
+      background: linear-gradient(135deg, var(--secondary), #3498db);
       color: white;
+      padding: 25px;
     }
     
     .course-code {
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       opacity: 0.9;
       margin-bottom: 5px;
     }
     
     .course-title {
-      font-size: 1.3rem;
-      font-weight: 700;
+      font-size: 1.4rem;
+      font-weight: 600;
       margin-bottom: 10px;
     }
     
-    .course-meta {
+    .course-semester {
       font-size: 0.9rem;
-      opacity: 0.95;
+      opacity: 0.85;
     }
     
-    .course-content {
+    .course-body {
       padding: 20px;
     }
     
-    .course-desc {
+    .course-instructor {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
       color: #666;
-      margin-bottom: 15px;
-      line-height: 1.6;
+      font-size: 0.95rem;
     }
     
-    .course-units {
-      margin-bottom: 15px;
-      padding: 10px;
+    .course-credits {
+      display: inline-block;
       background: var(--light);
-      border-radius: 4px;
-      font-size: 0.9rem;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      margin-bottom: 15px;
+    }
+    
+    .course-description {
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 15px;
+      font-size: 0.95rem;
+    }
+    
+    .course-footer {
+      display: flex;
+      gap: 10px;
     }
     
     .btn {
-      display: inline-block;
-      padding: 10px 20px;
+      flex: 1;
+      padding: 10px;
       background: var(--secondary);
       color: white;
-      text-decoration: none;
-      border-radius: 4px;
-      transition: background 0.3s;
-      cursor: pointer;
       border: none;
+      border-radius: 4px;
+      cursor: pointer;
       font-weight: 500;
-      width: 100%;
+      transition: background 0.3s;
       text-align: center;
+      text-decoration: none;
     }
     
     .btn:hover {
@@ -185,14 +274,14 @@ title: Courses
     }
     
     .btn-secondary {
-      background: #95a5a6;
+      background: var(--accent);
     }
     
     .btn-secondary:hover {
-      background: #7f8c8d;
+      background: #c0392b;
     }
     
-    /* Course Detail Modal */
+    /* Modal */
     .modal {
       display: none;
       position: fixed;
@@ -206,32 +295,31 @@ title: Courses
     }
     
     .modal-content {
-      background-color: white;
-      margin: 20px auto;
+      background: white;
+      margin: 30px auto;
       padding: 30px;
       border-radius: 8px;
       width: 90%;
-      max-width: 800px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      max-width: 900px;
+      box-shadow: var(--shadow);
     }
     
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
-      border-bottom: 2px solid var(--secondary);
+      margin-bottom: 25px;
       padding-bottom: 15px;
+      border-bottom: 2px solid var(--secondary);
     }
     
-    .modal-title {
+    .modal-header h2 {
       font-size: 1.8rem;
       color: var(--primary);
     }
     
     .close {
       font-size: 28px;
-      font-weight: bold;
       cursor: pointer;
       color: #aaa;
     }
@@ -240,90 +328,66 @@ title: Courses
       color: black;
     }
     
-    .course-sections {
-      margin: 20px 0;
+    .modal-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
     }
     
-    .section-title {
-      font-size: 1.2rem;
+    .course-info h3 {
       color: var(--secondary);
-      margin: 20px 0 10px 0;
-      font-weight: 600;
-    }
-    
-    .syllabus {
-      background: var(--light);
-      padding: 15px;
-      border-radius: 6px;
-      margin: 10px 0;
-      max-height: 300px;
-      overflow-y: auto;
-    }
-    
-    .syllabus ul {
-      margin-left: 20px;
-    }
-    
-    .syllabus li {
-      margin: 8px 0;
-      line-height: 1.6;
-    }
-    
-    .file-upload {
-      margin: 20px 0;
-      padding: 20px;
-      border: 2px dashed var(--secondary);
-      border-radius: 6px;
-      background: #f0f8ff;
-    }
-    
-    .file-upload h4 {
+      margin-top: 20px;
       margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+    
+    .course-info p {
+      color: #555;
+      line-height: 1.7;
+      margin-bottom: 10px;
+    }
+    
+    .syllabus-list {
+      list-style: none;
+      margin-left: 0;
+    }
+    
+    .syllabus-list li {
+      padding: 8px 0;
+      border-bottom: 1px solid var(--light);
+      color: #555;
+    }
+    
+    .syllabus-list li:before {
+      content: "✓ ";
       color: var(--secondary);
+      font-weight: bold;
+      margin-right: 8px;
     }
     
-    .form-group {
-      margin-bottom: 15px;
+    .files-section {
+      margin-top: 20px;
     }
     
-    .form-group input,
-    .form-group textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      font-family: inherit;
-    }
-    
-    .files-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 15px;
+    .files-section h4 {
+      color: var(--secondary);
+      margin-bottom: 12px;
+      font-size: 1rem;
     }
     
     .file-item {
+      background: var(--light);
+      padding: 12px;
+      border-radius: 4px;
+      margin-bottom: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px;
-      background: var(--light);
-      border-radius: 4px;
-      border-left: 4px solid var(--secondary);
-    }
-    
-    .file-info {
-      flex: 1;
     }
     
     .file-name {
-      font-weight: 500;
       color: var(--text);
-    }
-    
-    .file-size {
-      font-size: 0.8rem;
-      color: #999;
+      font-weight: 500;
     }
     
     .file-actions {
@@ -331,10 +395,65 @@ title: Courses
       gap: 8px;
     }
     
-    .btn-small {
-      padding: 6px 12px;
-      font-size: 0.85rem;
-      width: auto;
+    .file-btn {
+      padding: 4px 10px;
+      font-size: 0.8rem;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      color: white;
+      background: var(--secondary);
+    }
+    
+    .file-btn:hover {
+      background: #2980b9;
+    }
+    
+    .file-btn-delete {
+      background: var(--accent);
+    }
+    
+    .file-btn-delete:hover {
+      background: #c0392b;
+    }
+    
+    .upload-form {
+      background: var(--light);
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+    
+    .form-group {
+      margin-bottom: 12px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: inherit;
+    }
+    
+    .admin-section {
+      background: #fff3cd;
+      padding: 25px;
+      border-radius: 8px;
+      margin-top: 40px;
+      border: 2px solid #ffc107;
+    }
+    
+    .admin-section h3 {
+      color: var(--primary);
+      margin-bottom: 15px;
     }
     
     footer {
@@ -346,14 +465,12 @@ title: Courses
     }
     
     @media (max-width: 768px) {
-      .courses-grid {
+      .modal-body {
         grid-template-columns: 1fr;
       }
       
-      .modal-content {
-        width: 95%;
-        margin: 10px auto;
-        padding: 20px;
+      .courses-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -376,11 +493,48 @@ title: Courses
 
   <div class="container">
     <div class="page-header">
-      <h1>📚 Open Courses</h1>
-      <p>Teaching materials, lecture notes, and course resources inspired by MIT OpenCourseware</p>
+      <h1>📚 MIT OpenCourseware</h1>
+      <p>Access teaching materials, lecture notes, and assignments from my courses</p>
     </div>
 
-    <div class="courses-grid" id="coursesGrid"></div>
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="🔍 Search courses by title or code..." oninput="filterAndSearch()">
+    </div>
+
+    <div class="courses-wrapper">
+      <!-- 左侧分类栏 -->
+      <aside class="sidebar">
+        <h3>📂 Categories</h3>
+        <ul class="category-list" id="categoryList"></ul>
+      </aside>
+
+      <!-- 右侧课程显示区 -->
+      <div class="courses-content">
+        <div class="courses-grid" id="coursesGrid"></div>
+      </div>
+    </div>
+
+    <!-- Admin Section -->
+    <div class="admin-section" id="adminSection" style="display: none;">
+      <h3>➕ Add New Course</h3>
+      <form onsubmit="addCourse(event)">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+          <div class="form-group">
+            <label>Course Code:</label>
+            <input type="text" id="newCourseCode" placeholder="CS10005" required>
+          </div>
+          <div class="form-group">
+            <label>Course Title:</label>
+            <input type="text" id="newCourseTitle" placeholder="Course Title" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Description:</label>
+          <textarea id="newCourseDesc" placeholder="Course description" required></textarea>
+        </div>
+        <button type="submit" class="btn">➕ Add Course</button>
+      </form>
+    </div>
   </div>
 
   <!-- Course Detail Modal -->
@@ -388,28 +542,47 @@ title: Courses
     <div class="modal-content">
       <div class="modal-header">
         <div>
-          <div id="modalCourseCode" style="font-size: 0.9rem; color: #999; margin-bottom: 5px;"></div>
-          <div class="modal-title" id="modalCourseTitle"></div>
+          <h2 id="modalCourseTitle">Course Title</h2>
+          <p style="color: #666; margin-top: 5px;" id="modalCourseCode">CS10001</p>
         </div>
         <span class="close" onclick="closeCourseModal()">&times;</span>
       </div>
 
-      <div class="course-sections">
-        <div class="section-title">📖 Course Description</div>
-        <p id="modalCourseDesc"></p>
+      <div class="modal-body">
+        <div class="course-info">
+          <h3>Course Information</h3>
+          <p id="modalCourseDescription"></p>
+          
+          <h3>📋 Teaching Syllabus</h3>
+          <ul class="syllabus-list" id="modalSyllabus"></ul>
+          
+          <h3>👨‍🏫 Course Details</h3>
+          <p><strong>Instructor:</strong> <span id="modalInstructor">Zhang Jun</span></p>
+          <p><strong>Semester:</strong> <span id="modalSemester">Spring 2025</span></p>
+          <p><strong>Units:</strong> <span id="modalUnits">3</span></p>
+          <p><strong>Meeting Times:</strong> <span id="modalMeetingTime">MW 2:00 PM - 3:30 PM</span></p>
+          <p><strong>Location:</strong> <span id="modalLocation">Building 32, Room 123</span></p>
+        </div>
 
-        <div class="section-title">📋 Syllabus</div>
-        <div class="syllabus" id="modalSyllabus"></div>
-
-        <div class="section-title">📂 Course Materials</div>
-        <div class="files-list" id="modalFiles"></div>
-
-        <div class="file-upload" id="adminUploadSection" style="display: none;">
-          <h4>📤 Upload Course Material (Admin)</h4>
-          <div class="form-group">
-            <input type="file" id="fileToUpload" multiple accept=".pdf,.doc,.docx,.txt,.ppt,.pptx,.zip">
+        <div>
+          <div class="files-section">
+            <h4>📁 Course Materials</h4>
+            <div id="modalFilesList"></div>
+            
+            <div class="upload-form" id="uploadForm" style="display: none;">
+              <h4 style="margin-bottom: 15px;">Upload Course Material (Admin Only)</h4>
+              <div class="form-group">
+                <label>File Name:</label>
+                <input type="text" id="fileName" placeholder="e.g., Lecture 1 - Introduction" required>
+              </div>
+              <div class="form-group">
+                <label>Upload File:</label>
+                <input type="file" id="fileInput" required>
+              </div>
+              <button type="button" class="btn" onclick="uploadFile()" style="width: 100%; margin-bottom: 10px;">📤 Upload File</button>
+              <button type="button" class="btn btn-secondary" onclick="closeCourseModal()" style="width: 100%;">Close</button>
+            </div>
           </div>
-          <button class="btn btn-secondary" onclick="uploadFile()">Upload</button>
         </div>
       </div>
     </div>
@@ -421,253 +594,321 @@ title: Courses
   </footer>
 
   <script>
-    // Sample courses data
-    const coursesData = [
+    let coursesData = [
       {
         id: 1,
-        code: "CS 10001",
-        title: "Advanced Algorithms",
-        semester: "Spring 2025",
-        units: 4,
-        instructor: "Zhang, J.",
-        description: "Comprehensive study of advanced algorithmic techniques including dynamic programming, greedy algorithms, graph algorithms, and NP-completeness. Covers both theoretical foundations and practical applications.",
-        syllabus: `
-          <ul>
-            <li>Week 1-2: Algorithm Complexity Analysis and Big-O Notation</li>
-            <li>Week 3-4: Dynamic Programming</li>
-            <li>Week 5-6: Greedy Algorithms</li>
-            <li>Week 7-8: Graph Algorithms (DFS, BFS, Dijkstra)</li>
-            <li>Week 9-10: Minimum Spanning Trees</li>
-            <li>Week 11-12: NP-Completeness</li>
-            <li>Week 13-14: Approximation Algorithms</li>
-            <li>Week 15: Final Project Presentations</li>
-          </ul>
-        `,
-        files: []
+        code: 'CS10001',
+        title: 'Advanced Algorithms',
+        category: 'Core CS',
+        semester: 'Spring 2025',
+        units: 3,
+        instructor: 'Zhang Jun',
+        description: 'This course covers advanced topics in algorithm design and analysis. Students will learn about dynamic programming, graph algorithms, computational complexity, approximation algorithms, and randomized algorithms. Through hands-on projects, students will implement and analyze state-of-the-art algorithms.',
+        meetingTime: 'MW 2:00 PM - 3:30 PM',
+        location: 'Building 32, Room 201',
+        syllabus: [
+          'Introduction to Advanced Algorithm Analysis',
+          'Dynamic Programming and Optimization',
+          'Graph Algorithms (BFS, DFS, Shortest Paths)',
+          'Minimum Spanning Trees and Greedy Algorithms',
+          'Network Flow and Matching',
+          'Computational Complexity Classes (P, NP, NP-Complete)',
+          'Approximation Algorithms',
+          'Randomized Algorithms and Monte Carlo Methods',
+          'String Matching and Pattern Recognition',
+          'Geometric Algorithms'
+        ],
+        files: [
+          { name: 'Lecture 1 - Algorithm Basics.pdf', size: '2.4 MB' },
+          { name: 'Lecture 2 - Dynamic Programming.pdf', size: '3.1 MB' },
+          { name: 'Problem Set 1 - Due Feb 10.pdf', size: '0.8 MB' },
+          { name: 'Project 1 - Traveling Salesman.pdf', size: '1.2 MB' }
+        ]
       },
       {
         id: 2,
-        code: "CS 10002",
-        title: "Machine Learning Foundations",
-        semester: "Fall 2024",
+        code: 'CS10002',
+        title: 'Machine Learning Foundations',
+        category: 'AI/ML',
+        semester: 'Spring 2025',
         units: 3,
-        instructor: "Zhang, J.",
-        description: "Introduction to machine learning fundamentals including supervised and unsupervised learning. Topics cover linear regression, classification, clustering, neural networks, and practical applications.",
-        syllabus: `
-          <ul>
-            <li>Week 1-2: Introduction and Mathematical Foundations</li>
-            <li>Week 3-4: Linear Regression and Regularization</li>
-            <li>Week 5-6: Logistic Regression and Classification</li>
-            <li>Week 7-8: Decision Trees and Ensemble Methods</li>
-            <li>Week 9-10: Neural Networks Basics</li>
-            <li>Week 11-12: Unsupervised Learning (K-means, PCA)</li>
-            <li>Week 13-14: Deep Learning Applications</li>
-            <li>Week 15: Final Project</li>
-          </ul>
-        `,
-        files: []
+        instructor: 'Zhang Jun',
+        description: 'Introduction to machine learning fundamentals. This course covers supervised and unsupervised learning, regression, classification, clustering, neural networks, and practical considerations. Students will implement ML algorithms from scratch and work with industry-standard libraries.',
+        meetingTime: 'TR 1:00 PM - 2:30 PM',
+        location: 'Building 34, Room 301',
+        syllabus: [
+          'Introduction to Machine Learning Paradigms',
+          'Linear Regression and Regularization',
+          'Logistic Regression and Classification',
+          'Decision Trees and Ensemble Methods',
+          'Support Vector Machines (SVM)',
+          'Unsupervised Learning: K-Means and Hierarchical Clustering',
+          'Dimensionality Reduction (PCA, t-SNE)',
+          'Neural Networks and Deep Learning Basics',
+          'Evaluation Metrics and Cross-Validation',
+          'Practical Considerations: Feature Engineering and Data Cleaning'
+        ],
+        files: [
+          { name: 'Lecture 1 - ML Overview.pdf', size: '2.8 MB' },
+          { name: 'Lecture 2 - Regression.pdf', size: '3.5 MB' },
+          { name: 'Lab 1 - Linear Regression.ipynb', size: '4.2 MB' },
+          { name: 'Homework 1 - Classification.pdf', size: '1.1 MB' },
+          { name: 'Dataset - Housing Data.csv', size: '0.5 MB' }
+        ]
       },
       {
         id: 3,
-        code: "CS 10003",
-        title: "Quantum Computing Introduction",
-        semester: "Spring 2025",
+        code: 'CS10003',
+        title: 'Quantum Computing Fundamentals',
+        category: 'Advanced Topics',
+        semester: 'Spring 2025',
         units: 3,
-        instructor: "Zhang, J.",
-        description: "Introduction to quantum computing principles and algorithms. Covers quantum bits, quantum gates, quantum algorithms, and applications in machine learning and optimization.",
-        syllabus: `
-          <ul>
-            <li>Week 1-2: Quantum Mechanics Fundamentals</li>
-            <li>Week 3-4: Qubits and Quantum Gates</li>
-            <li>Week 5-6: Quantum Circuits</li>
-            <li>Week 7-8: Quantum Algorithms (Shor's, Grover's)</li>
-            <li>Week 9-10: Quantum Machine Learning</li>
-            <li>Week 11-12: Quantum Error Correction</li>
-            <li>Week 13-14: Applications and Future Directions</li>
-            <li>Week 15: Final Project</li>
-          </ul>
-        `,
-        files: []
+        instructor: 'Zhang Jun',
+        description: 'An introduction to quantum computing and quantum algorithms. This course covers quantum mechanics basics, quantum gates, quantum circuits, and famous algorithms like Shor\'s and Grover\'s. Students will use quantum simulation frameworks and run code on cloud quantum computers.',
+        meetingTime: 'MWF 10:00 AM - 11:00 AM',
+        location: 'Building 13, Room 105',
+        syllabus: [
+          'Quantum Mechanics Fundamentals',
+          'Qubits, Superposition, and Entanglement',
+          'Quantum Gates and Operations',
+          'Quantum Circuits',
+          'Quantum Algorithms: Deutsch-Jozsa',
+          'Shor\'s Algorithm for Factoring',
+          'Grover\'s Search Algorithm',
+          'Quantum Error Correction',
+          'NISQ Algorithms and VQE',
+          'Quantum Machine Learning Applications'
+        ],
+        files: [
+          { name: 'Lecture 1 - Quantum Basics.pdf', size: '3.2 MB' },
+          { name: 'Lecture 2 - Quantum Gates.pdf', size: '2.9 MB' },
+          { name: 'Qiskit Tutorial - Getting Started.ipynb', size: '5.1 MB' },
+          { name: 'Problem Set 1.pdf', size: '1.5 MB' }
+        ]
       },
       {
         id: 4,
-        code: "CS 10004",
-        title: "Natural Language Processing",
-        semester: "Fall 2024",
-        units: 4,
-        instructor: "Zhang, J.",
-        description: "Advanced NLP techniques including transformer models, embeddings, and language understanding. Practical experience with state-of-the-art tools and frameworks.",
-        syllabus: `
-          <ul>
-            <li>Week 1-2: NLP Fundamentals</li>
-            <li>Week 3-4: Word Embeddings and Representations</li>
-            <li>Week 5-6: Recurrent Neural Networks</li>
-            <li>Week 7-8: Attention Mechanisms</li>
-            <li>Week 9-10: Transformer Models</li>
-            <li>Week 11-12: Language Models and GPT</li>
-            <li>Week 13-14: Applications (NMT, QA, Sentiment Analysis)</li>
-            <li>Week 15: Final Project</li>
-          </ul>
-        `,
-        files: []
+        code: 'CS10004',
+        title: 'Natural Language Processing',
+        category: 'AI/ML',
+        semester: 'Spring 2025',
+        units: 3,
+        instructor: 'Zhang Jun',
+        description: 'Deep dive into modern natural language processing techniques. Covers tokenization, embeddings, sequence models, attention mechanisms, and transformer architectures. Students will build NLP systems for text classification, machine translation, and question answering.',
+        meetingTime: 'TR 2:30 PM - 4:00 PM',
+        location: 'Building 32, Room 405',
+        syllabus: [
+          'NLP Fundamentals and Text Processing',
+          'Word Embeddings (Word2Vec, GloVe, FastText)',
+          'Sequence Models: RNN, LSTM, GRU',
+          'Attention Mechanisms',
+          'Transformer Architecture',
+          'BERT and Pre-trained Language Models',
+          'Text Classification and Sentiment Analysis',
+          'Machine Translation with Seq2Seq',
+          'Question Answering Systems',
+          'Named Entity Recognition and Information Extraction'
+        ],
+        files: [
+          { name: 'Lecture 1 - NLP Intro.pdf', size: '2.6 MB' },
+          { name: 'Lecture 2 - Word Embeddings.pdf', size: '3.3 MB' },
+          { name: 'Lab 1 - Sentiment Analysis.ipynb', size: '6.2 MB' },
+          { name: 'Midterm Project Guidelines.pdf', size: '1.8 MB' },
+          { name: 'Dataset - Movie Reviews.csv', size: '2.1 MB' }
+        ]
       }
     ];
 
     let currentCourseId = null;
+    let currentCategory = 'All';
 
-    // Render courses grid
-    function renderCourses() {
-      const grid = document.getElementById('coursesGrid');
-      grid.innerHTML = '';
+    // 获取所有独特分类
+    function getCategories() {
+      const categories = [...new Set(coursesData.map(c => c.category))];
+      return ['All', ...categories.sort()];
+    }
 
-      coursesData.forEach(course => {
-        const card = document.createElement('div');
-        card.className = 'course-card';
-        card.onclick = () => openCourseModal(course.id);
-        
-        card.innerHTML = `
-          <div class="course-header">
-            <div class="course-code">${course.code}</div>
-            <div class="course-title">${course.title}</div>
-            <div class="course-meta">${course.semester} • ${course.units} Units</div>
-          </div>
-          <div class="course-content">
-            <div class="course-desc">${course.description.substring(0, 120)}...</div>
-            <div class="course-units">👨‍🏫 ${course.instructor}</div>
-            <button class="btn" style="margin-top: 10px;">View Course →</button>
-          </div>
-        `;
-        
-        grid.appendChild(card);
+    // 渲染分类按钮
+    function renderCategories() {
+      const categoryList = document.getElementById('categoryList');
+      categoryList.innerHTML = '';
+      
+      getCategories().forEach(category => {
+        const li = document.createElement('li');
+        li.className = 'category-item' + (category === currentCategory ? ' active' : '');
+        li.textContent = category;
+        li.onclick = () => {
+          currentCategory = category;
+          filterAndSearch();
+          document.querySelectorAll('.category-item').forEach(item => item.classList.remove('active'));
+          li.classList.add('active');
+        };
+        categoryList.appendChild(li);
       });
     }
 
-    // Open course modal
-    function openCourseModal(courseId) {
-      currentCourseId = courseId;
-      const course = coursesData.find(c => c.id === courseId);
-      
-      document.getElementById('modalCourseCode').textContent = course.code;
-      document.getElementById('modalCourseTitle').textContent = course.title;
-      document.getElementById('modalCourseDesc').textContent = course.description;
-      document.getElementById('modalSyllabus').innerHTML = course.syllabus;
-      
-      renderFilesList(course.files);
-      
-      if (localStorage.getItem('adminMode') === 'true') {
-        document.getElementById('adminUploadSection').style.display = 'block';
+    // 按编号排序和筛选课程
+    function getFilteredCourses() {
+      let filtered = coursesData;
+
+      // 按分类筛选
+      if (currentCategory !== 'All') {
+        filtered = filtered.filter(c => c.category === currentCategory);
       }
-      
+
+      // 按搜索关键词筛选（搜索标题和编号）
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      if (searchTerm) {
+        filtered = filtered.filter(c => 
+          c.title.toLowerCase().includes(searchTerm) || 
+          c.code.toLowerCase().includes(searchTerm)
+        );
+      }
+
+      // 按编号排序
+      return filtered.sort((a, b) => {
+        const codeA = a.code.replace(/\D/g, '');
+        const codeB = b.code.replace(/\D/g, '');
+        return parseInt(codeA) - parseInt(codeB);
+      });
+    }
+
+    // 筛选和搜索函数
+    function filterAndSearch() {
+      const filtered = getFilteredCourses();
+      renderCourses(filtered);
+    }
+
+    // 渲染课程卡片
+    function renderCourses(coursesToRender = coursesData) {
+      const grid = document.getElementById('coursesGrid');
+      grid.innerHTML = coursesToRender.map(course => `
+        <div class="course-card" onclick="openCourseModal(${course.id})">
+          <div class="course-header">
+            <div class="course-code">${course.code}</div>
+            <div class="course-title">${course.title}</div>
+            <div class="course-semester">${course.semester}</div>
+          </div>
+          <div class="course-body">
+            <div class="course-instructor">👨‍🏫 ${course.instructor}</div>
+            <div class="course-credits">${course.units} Units</div>
+            <div class="course-description">${course.description.substring(0, 120)}...</div>
+            <div class="course-footer">
+              <button class="btn" onclick="event.stopPropagation()">📖 View Details</button>
+              <button class="btn btn-secondary" onclick="event.stopPropagation()">📁 Materials</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openCourseModal(courseId) {
+      const course = coursesData.find(c => c.id === courseId);
+      currentCourseId = courseId;
+
+      document.getElementById('modalCourseTitle').textContent = course.title;
+      document.getElementById('modalCourseCode').textContent = course.code;
+      document.getElementById('modalCourseDescription').textContent = course.description;
+      document.getElementById('modalInstructor').textContent = course.instructor;
+      document.getElementById('modalSemester').textContent = course.semester;
+      document.getElementById('modalUnits').textContent = course.units;
+      document.getElementById('modalMeetingTime').textContent = course.meetingTime;
+      document.getElementById('modalLocation').textContent = course.location;
+
+      // Render syllabus
+      const syllabusList = document.getElementById('modalSyllabus');
+      syllabusList.innerHTML = course.syllabus.map(item => `<li>${item}</li>`).join('');
+
+      // Render files
+      const filesList = document.getElementById('modalFilesList');
+      filesList.innerHTML = course.files.map((file, idx) => `
+        <div class="file-item">
+          <span class="file-name">📄 ${file.name}</span>
+          <div class="file-actions">
+            <button class="file-btn" onclick="downloadFile('${file.name}')">📥</button>
+            <button class="file-btn file-btn-delete" onclick="deleteFile(${courseId}, ${idx})" id="deleteBtn${idx}" style="display: none;">🗑️</button>
+          </div>
+        </div>
+      `).join('');
+
+      // Show upload form if admin
+      if (localStorage.getItem('adminMode') === 'true') {
+        document.getElementById('uploadForm').style.display = 'block';
+        document.querySelectorAll('[id^="deleteBtn"]').forEach(btn => btn.style.display = 'inline-block');
+      }
+
       document.getElementById('courseModal').style.display = 'block';
     }
 
-    // Close modal
     function closeCourseModal() {
       document.getElementById('courseModal').style.display = 'none';
     }
 
-    // Render files list
-    function renderFilesList(files) {
-      const filesList = document.getElementById('modalFiles');
-      filesList.innerHTML = '';
-      
-      if (files.length === 0) {
-        filesList.innerHTML = '<p style="color: #999;">No files uploaded yet</p>';
-        return;
-      }
-      
-      files.forEach((file, index) => {
-        const item = document.createElement('div');
-        item.className = 'file-item';
-        item.innerHTML = `
-          <div class="file-info">
-            <div class="file-name">📄 ${file.name}</div>
-            <div class="file-size">${(file.size / 1024).toFixed(2)} KB</div>
-          </div>
-          <div class="file-actions">
-            <a href="${file.url}" class="btn btn-small" download>Download</a>
-            ${localStorage.getItem('adminMode') === 'true' ? `<button class="btn btn-small btn-secondary" onclick="deleteFile(${currentCourseId}, ${index})">Delete</button>` : ''}
-          </div>
-        `;
-        filesList.appendChild(item);
-      });
+    function downloadFile(filename) {
+      alert('📥 Downloading: ' + filename);
     }
 
-    // Upload file
     function uploadFile() {
-      const input = document.getElementById('fileToUpload');
-      const files = input.files;
+      const fileName = document.getElementById('fileName').value;
+      const fileInput = document.getElementById('fileInput');
       
-      if (files.length === 0) {
-        alert('Please select a file');
+      if (!fileName || !fileInput.files.length) {
+        alert('⚠️ Please enter a file name and select a file');
         return;
       }
-      
+
       const course = coursesData.find(c => c.id === currentCourseId);
-      
-      for (let file of files) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const fileData = {
-            name: file.name,
-            size: file.size,
-            url: e.target.result,
-            uploadedAt: new Date().toLocaleString()
-          };
-          
-          course.files.push(fileData);
-          saveCourseData();
-          renderFilesList(course.files);
-          input.value = '';
-          alert(`✅ File "${file.name}" uploaded successfully!`);
-        };
-        reader.readAsDataURL(file);
-      }
+      const file = fileInput.files[0];
+      course.files.push({ name: fileName, size: (file.size / (1024 * 1024)).toFixed(1) + ' MB' });
+
+      alert('✅ File uploaded successfully!');
+      document.getElementById('fileName').value = '';
+      fileInput.value = '';
+      openCourseModal(currentCourseId);
     }
 
-    // Delete file
-    function deleteFile(courseId, fileIndex) {
+    function deleteFile(courseId, fileIdx) {
       if (confirm('Delete this file?')) {
         const course = coursesData.find(c => c.id === courseId);
-        course.files.splice(fileIndex, 1);
-        saveCourseData();
-        renderFilesList(course.files);
+        course.files.splice(fileIdx, 1);
+        openCourseModal(courseId);
         alert('✅ File deleted');
       }
     }
 
-    // Save to localStorage
-    function saveCourseData() {
-      localStorage.setItem('coursesData', JSON.stringify(coursesData));
+    function addCourse(event) {
+      event.preventDefault();
+      const newCourse = {
+        id: coursesData.length + 1,
+        code: document.getElementById('newCourseCode').value,
+        title: document.getElementById('newCourseTitle').value,
+        semester: 'Spring 2025',
+        units: 3,
+        instructor: 'Zhang Jun',
+        description: document.getElementById('newCourseDesc').value,
+        meetingTime: 'MWF 2:00 PM',
+        location: 'TBA',
+        syllabus: ['Topic 1', 'Topic 2', 'Topic 3'],
+        files: []
+      };
+      
+      coursesData.push(newCourse);
+      alert('✅ Course added!');
+      event.target.reset();
+      renderCourses();
     }
 
-    // Load from localStorage
-    function loadCourseData() {
-      const stored = localStorage.getItem('coursesData');
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        coursesData.forEach(course => {
-          const stored_course = parsed.find(c => c.id === course.id);
-          if (stored_course) {
-            course.files = stored_course.files || [];
-          }
-        });
-      }
-    }
-
-    // Admin modal
     function openAdminModal() {
       const password = prompt('🔐 Enter admin password:');
       if (password === 'Philo518sophy') {
         localStorage.setItem('adminMode', 'true');
+        document.getElementById('adminSection').style.display = 'block';
         alert('✅ Admin mode activated!');
-        location.reload();
       } else if (password) {
         alert('❌ Invalid password');
       }
     }
 
-    // Close modal on outside click
     window.onclick = function(event) {
       const modal = document.getElementById('courseModal');
       if (event.target === modal) {
@@ -675,8 +916,11 @@ title: Courses
       }
     }
 
-    // Initialize
-    loadCourseData();
+    if (localStorage.getItem('adminMode') === 'true') {
+      document.getElementById('adminSection').style.display = 'block';
+    }
+
+    renderCategories();
     renderCourses();
   </script>
 </body>

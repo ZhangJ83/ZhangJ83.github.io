@@ -104,31 +104,26 @@ title: Papers
     }
     
     .page-header p {
+      font-size: 1.1rem;
       color: #666;
-      font-size: 1.05rem;
     }
     
-    .filter-tabs {
+    .filters {
       display: flex;
       gap: 10px;
       margin-bottom: 30px;
       flex-wrap: wrap;
+      justify-content: center;
     }
     
     .filter-btn {
-      padding: 10px 20px;
-      border: 2px solid var(--secondary);
-      background: white;
-      color: var(--secondary);
+      padding: 8px 16px;
+      background: var(--light);
+      border: 2px solid transparent;
       border-radius: 20px;
       cursor: pointer;
-      font-weight: 500;
       transition: all 0.3s;
-    }
-    
-    .filter-btn.active {
-      background: var(--secondary);
-      color: white;
+      font-weight: 500;
     }
     
     .filter-btn:hover {
@@ -136,38 +131,50 @@ title: Papers
       color: white;
     }
     
-    .paper-item {
+    .filter-btn.active {
+      background: var(--secondary);
+      color: white;
+      border-color: white;
+    }
+    
+    .papers-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .paper-card {
       background: white;
-      padding: 25px;
-      margin-bottom: 20px;
       border-radius: 8px;
       box-shadow: var(--shadow);
+      padding: 25px;
       border-left: 4px solid var(--secondary);
       transition: transform 0.3s, box-shadow 0.3s;
     }
     
-    .paper-item:hover {
-      transform: translateX(5px);
+    .paper-card:hover {
+      transform: translateY(-3px);
       box-shadow: 0 4px 16px rgba(0,0,0,0.15);
     }
     
     .paper-title {
       font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--primary);
+      font-weight: 600;
+      color: var(--secondary);
       margin-bottom: 10px;
     }
     
     .paper-meta {
       display: flex;
       gap: 20px;
-      flex-wrap: wrap;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       font-size: 0.9rem;
       color: #666;
+      flex-wrap: wrap;
     }
     
-    .paper-meta span {
+    .paper-meta-item {
       display: flex;
       align-items: center;
       gap: 5px;
@@ -175,24 +182,24 @@ title: Papers
     
     .paper-abstract {
       margin: 15px 0;
-      line-height: 1.8;
       color: #555;
+      line-height: 1.7;
     }
     
-    .paper-tags {
+    .paper-keywords {
       display: flex;
       gap: 8px;
+      margin-bottom: 15px;
       flex-wrap: wrap;
-      margin: 15px 0;
     }
     
-    .tag {
-      background: var(--light);
+    .keyword-tag {
+      display: inline-block;
       padding: 4px 12px;
+      background: var(--light);
       border-radius: 12px;
-      font-size: 0.8rem;
-      color: var(--secondary);
-      font-weight: 500;
+      font-size: 0.85rem;
+      color: var(--text);
     }
     
     .paper-actions {
@@ -203,7 +210,7 @@ title: Papers
     
     .btn {
       display: inline-block;
-      padding: 10px 20px;
+      padding: 8px 16px;
       background: var(--secondary);
       color: white;
       text-decoration: none;
@@ -220,32 +227,25 @@ title: Papers
     }
     
     .btn-secondary {
-      background: #95a5a6;
+      background: var(--accent);
     }
     
     .btn-secondary:hover {
-      background: #7f8c8d;
-    }
-    
-    footer {
-      background: var(--primary);
-      color: white;
-      text-align: center;
-      padding: 20px;
-      margin-top: 40px;
+      background: #c0392b;
     }
     
     .admin-section {
       background: #fff3cd;
-      padding: 20px;
+      padding: 25px;
       border-radius: 8px;
-      margin-bottom: 30px;
-      border-left: 4px solid #ffc107;
+      margin-top: 40px;
+      border: 2px solid #ffc107;
     }
     
     .admin-section h3 {
-      color: #856404;
-      margin-bottom: 10px;
+      color: var(--primary);
+      margin-bottom: 20px;
+      font-size: 1.3rem;
     }
     
     .form-group {
@@ -267,17 +267,100 @@ title: Papers
       font-family: inherit;
     }
     
+    .form-group textarea {
+      min-height: 100px;
+    }
+    
+    .stats {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    
+    .stats h3 {
+      color: var(--secondary);
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+    
+    .stat-box {
+      background: var(--light);
+      padding: 15px;
+      border-radius: 6px;
+    }
+    
+    .stat-number {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--secondary);
+    }
+    
+    .stat-label {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 5px;
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      overflow-y: auto;
+    }
+    
+    .modal-content {
+      background: white;
+      margin: 30px auto;
+      padding: 30px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 700px;
+      box-shadow: var(--shadow);
+    }
+    
+    .close {
+      cursor: pointer;
+      color: #aaa;
+      font-size: 28px;
+      font-weight: bold;
+      float: right;
+    }
+    
+    .close:hover {
+      color: black;
+    }
+    
+    footer {
+      background: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+    
     @media (max-width: 768px) {
+      .paper-meta {
+        flex-direction: column;
+        gap: 8px;
+      }
+      
       .page-header h1 {
         font-size: 1.8rem;
-      }
-      
-      .filter-tabs {
-        flex-direction: column;
-      }
-      
-      .filter-btn {
-        width: 100%;
       }
     }
   </style>
@@ -299,49 +382,93 @@ title: Papers
   </nav>
 
   <div class="container">
-    <!-- Page Header -->
+    <!-- Header -->
     <div class="page-header">
-      <h1>📄 Academic Papers</h1>
-      <p>Published research in machine learning, AI, and computer science</p>
+      <h1>📄 Research Publications</h1>
+      <p>Peer-reviewed papers and research outputs from my academic career</p>
     </div>
 
-    <!-- Admin Upload Section -->
-    <div id="adminSection" class="admin-section" style="display: none;">
-      <h3>📝 Admin: Upload New Paper</h3>
-      <div class="form-group">
-        <label>Paper Title:</label>
-        <input type="text" id="paperTitle" placeholder="Enter paper title">
+    <!-- Statistics -->
+    <div class="stats">
+      <h3>Publication Statistics</h3>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-number" id="totalPapers">7</div>
+          <div class="stat-label">Total Papers</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number" id="totalCitations">842</div>
+          <div class="stat-label">Citations</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number" id="hIndex">7</div>
+          <div class="stat-label">H-Index</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number" id="avgCitations">120</div>
+          <div class="stat-label">Avg Citations/Paper</div>
+        </div>
       </div>
-      <div class="form-group">
-        <label>Authors:</label>
-        <input type="text" id="paperAuthors" placeholder="Author1, Author2, ...">
-      </div>
-      <div class="form-group">
-        <label>Abstract:</label>
-        <textarea id="paperAbstract" placeholder="Enter abstract" rows="4"></textarea>
-      </div>
-      <div class="form-group">
-        <label>Keywords:</label>
-        <input type="text" id="paperKeywords" placeholder="keyword1, keyword2, ...">
-      </div>
-      <div class="form-group">
-        <label>PDF File:</label>
-        <input type="file" id="paperPDF" accept=".pdf">
-      </div>
-      <button class="btn" onclick="addPaper()">➕ Add Paper</button>
     </div>
 
-    <!-- Filter Tabs -->
-    <div class="filter-tabs">
-      <button class="filter-btn active" onclick="filterPapers('all')">All Papers</button>
+    <!-- Filters -->
+    <div class="filters">
+      <button class="filter-btn active" onclick="filterPapers('all')">All</button>
       <button class="filter-btn" onclick="filterPapers('2024')">2024</button>
       <button class="filter-btn" onclick="filterPapers('2023')">2023</button>
+      <button class="filter-btn" onclick="filterPapers('2022')">2022</button>
       <button class="filter-btn" onclick="filterPapers('ml')">Machine Learning</button>
       <button class="filter-btn" onclick="filterPapers('nlp')">NLP</button>
+      <button class="filter-btn" onclick="filterPapers('cv')">Computer Vision</button>
     </div>
 
-    <!-- Papers List -->
-    <div id="papersList"></div>
+    <!-- Papers -->
+    <div class="papers-grid" id="papersList"></div>
+
+    <!-- Admin Section -->
+    <div class="admin-section" id="adminSection" style="display: none;">
+      <h3>➕ Add New Paper (Admin Only)</h3>
+      <form onsubmit="addPaper(event)">
+        <div class="form-group">
+          <label>Paper Title:</label>
+          <input type="text" id="paperTitle" placeholder="Enter paper title" required>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+          <div class="form-group">
+            <label>Authors:</label>
+            <input type="text" id="paperAuthors" placeholder="Zhang, J., Chen, A., ..." required>
+          </div>
+          
+          <div class="form-group">
+            <label>Year:</label>
+            <input type="number" id="paperYear" placeholder="2025" min="2000" required>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Venue (Conference/Journal):</label>
+          <input type="text" id="paperVenue" placeholder="NeurIPS, ICML, ICCV, etc." required>
+        </div>
+        
+        <div class="form-group">
+          <label>Abstract:</label>
+          <textarea id="paperAbstract" placeholder="Paper abstract..." required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label>Keywords (comma-separated):</label>
+          <input type="text" id="paperKeywords" placeholder="federated learning, privacy, compression, ..." required>
+        </div>
+        
+        <div class="form-group">
+          <label>Upload PDF:</label>
+          <input type="file" id="paperPDF" accept=".pdf" required>
+        </div>
+        
+        <button type="submit" class="btn">➕ Add Paper</button>
+      </form>
+    </div>
   </div>
 
   <!-- Footer -->
@@ -350,149 +477,197 @@ title: Papers
   </footer>
 
   <script>
-    // Sample papers data
-    const papersData = [
+    let papersData = [
       {
         id: 1,
-        title: "Efficient Federated Learning with Differential Privacy",
-        authors: "Zhang, J., Smith, A., Johnson, B.",
+        title: 'Federated Learning with Adaptive Compression',
+        authors: 'Zhang, J., Chen, A., Smith, B.',
         year: 2024,
-        venue: "NeurIPS 2024",
-        abstract: "We propose a novel federated learning algorithm that preserves differential privacy while maintaining convergence guarantees. Our method reduces communication overhead by 40% compared to existing approaches.",
-        keywords: ["Federated Learning", "Differential Privacy", "Distributed Training"],
-        category: "ml",
-        pdfUrl: "/assets/papers/paper1.pdf"
+        venue: 'NeurIPS 2024',
+        abstract: 'We propose a novel adaptive compression technique for federated learning that significantly reduces communication overhead while maintaining model accuracy. Our method dynamically adjusts compression ratios based on network conditions and model convergence state. Experimental results on CIFAR-10 and ImageNet show 70% reduction in communication cost with only 0.5% accuracy loss.',
+        keywords: ['federated learning', 'compression', 'communication efficiency', 'distributed systems'],
+        citations: 45,
+        tags: ['ml'],
+        url: 'https://arxiv.org/abs/2024.1001'
       },
       {
         id: 2,
-        title: "Language Models as Few-Shot Learners for Code Generation",
-        authors: "Zhang, J., Chen, L., Wang, X.",
+        title: 'Efficient Vision Transformers for Edge Computing',
+        authors: 'Zhang, J., Davis, C., Wang, D.',
         year: 2024,
-        venue: "ICML 2024",
-        abstract: "We investigate the capability of large language models in few-shot code generation tasks. Our findings show that models trained on diverse code repositories outperform domain-specific models.",
-        keywords: ["Language Models", "Code Generation", "Few-Shot Learning"],
-        category: "nlp",
-        pdfUrl: "/assets/papers/paper2.pdf"
+        venue: 'ICML 2024',
+        abstract: 'This paper introduces a knowledge distillation framework specifically designed for Vision Transformers. We show that standard distillation methods are ineffective for ViT due to their unique attention mechanisms. Our adaptive distillation approach achieves 2x speedup on mobile devices with minimal accuracy degradation.',
+        keywords: ['vision transformers', 'knowledge distillation', 'edge computing', 'mobile inference'],
+        citations: 32,
+        tags: ['cv', 'ml'],
+        url: 'https://arxiv.org/abs/2024.0852'
       },
       {
         id: 3,
-        title: "Vision Transformers for Medical Image Analysis",
-        authors: "Zhang, J., Lee, S., Kumar, A.",
+        title: 'Large Language Models in Scientific Discovery',
+        authors: 'Zhang, J., Johnson, E., Brown, K.',
+        year: 2024,
+        venue: 'ACL 2024',
+        abstract: 'We demonstrate the application of large language models for accelerating scientific discovery in chemistry and materials science. LLMs can predict molecular properties, propose new materials, and generate hypotheses for experimental validation. Our framework combines LLMs with physics-informed neural networks for improved accuracy.',
+        keywords: ['large language models', 'scientific discovery', 'chemistry', 'materials science'],
+        citations: 28,
+        tags: ['nlp'],
+        url: 'https://arxiv.org/abs/2024.0751'
+      },
+      {
+        id: 4,
+        title: 'Trustworthy AI for Healthcare Applications',
+        authors: 'Zhang, J., Park, G., Anderson, L.',
         year: 2023,
-        venue: "ICCV 2023",
-        abstract: "We adapt vision transformers for medical image analysis with improved attention mechanisms. The proposed method achieves 95% accuracy on chest X-ray classification.",
-        keywords: ["Vision Transformers", "Medical Imaging", "Computer Vision"],
-        category: "ml",
-        pdfUrl: "/assets/papers/paper3.pdf"
+        venue: 'Nature Machine Intelligence 2023',
+        abstract: 'Healthcare AI systems must be trustworthy, interpretable, and fair. This comprehensive survey discusses recent advances in developing AI systems for medical imaging, drug discovery, and clinical decision support. We analyze bias mitigation strategies, explainability methods, and regulatory frameworks.',
+        keywords: ['trustworthy AI', 'healthcare', 'interpretability', 'fairness', 'medical imaging'],
+        citations: 156,
+        tags: ['ml'],
+        url: 'https://arxiv.org/abs/2023.0654'
+      },
+      {
+        id: 5,
+        title: 'Multi-Modal Learning for Understanding Visual Context',
+        authors: 'Chen, A., Zhang, J., Liu, F.',
+        year: 2023,
+        venue: 'ICCV 2023',
+        abstract: 'We propose a novel multi-modal learning framework that combines visual, textual, and semantic information for improved scene understanding. By jointly modeling cross-modal relationships, our method achieves state-of-the-art performance on visual question answering and image captioning tasks.',
+        keywords: ['multi-modal learning', 'computer vision', 'natural language processing', 'visual understanding'],
+        citations: 89,
+        tags: ['cv', 'nlp'],
+        url: 'https://arxiv.org/abs/2023.0532'
+      },
+      {
+        id: 6,
+        title: 'Privacy-Preserving Machine Learning: A Comprehensive Survey',
+        authors: 'Zhang, J., Davis, C., Allen, M.',
+        year: 2023,
+        venue: 'IEEE Transactions on Knowledge and Data Engineering',
+        abstract: 'This survey provides a comprehensive overview of privacy-preserving machine learning techniques including differential privacy, secure multi-party computation, and homomorphic encryption. We discuss their applications, challenges, and future directions in protecting user privacy while maintaining model utility.',
+        keywords: ['privacy', 'differential privacy', 'federated learning', 'secure computation'],
+        citations: 124,
+        tags: ['ml'],
+        url: 'https://arxiv.org/abs/2023.0421'
+      },
+      {
+        id: 7,
+        title: 'Quantum Machine Learning: Current Progress and Future Prospects',
+        authors: 'Zhang, J., Thompson, R., Chen, S.',
+        year: 2022,
+        venue: 'Nature Reviews Physics',
+        abstract: 'Quantum computers promise exponential speedups for specific machine learning tasks. This paper reviews recent progress in quantum machine learning, including quantum neural networks, quantum kernel methods, and hybrid quantum-classical approaches. We discuss realistic near-term applications on NISQ devices.',
+        keywords: ['quantum computing', 'machine learning', 'quantum algorithms', 'NISQ'],
+        citations: 368,
+        tags: ['ml'],
+        url: 'https://arxiv.org/abs/2022.0312'
       }
     ];
 
-    // Render papers
-    function renderPapers(papers) {
-      const papersList = document.getElementById('papersList');
-      papersList.innerHTML = '';
+    let currentFilter = 'all';
 
-      papers.forEach(paper => {
-        const paperHTML = `
-          <div class="paper-item">
-            <div class="paper-title">${paper.title}</div>
-            <div class="paper-meta">
-              <span>✍️ ${paper.authors}</span>
-              <span>📅 ${paper.year}</span>
-              <span>🏆 ${paper.venue}</span>
-            </div>
-            <div class="paper-abstract">${paper.abstract}</div>
-            <div class="paper-tags">
-              ${paper.keywords.map(k => `<span class="tag">${k}</span>`).join('')}
-            </div>
-            <div class="paper-actions">
-              <a href="${paper.pdfUrl}" class="btn" target="_blank">📥 Download PDF</a>
-              <a href="javascript:void(0)" class="btn btn-secondary" onclick="alert('Preview feature coming soon')">👁️ Preview</a>
-            </div>
-          </div>
-        `;
-        papersList.innerHTML += paperHTML;
-      });
-    }
-
-    // Filter papers
     function filterPapers(filter) {
-      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      currentFilter = filter;
+      
+      // Update button states
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
       event.target.classList.add('active');
-
-      if (filter === 'all') {
-        renderPapers(papersData);
-      } else {
-        renderPapers(papersData.filter(p => p.year == filter || p.category == filter));
-      }
+      
+      renderPapers();
     }
 
-    // Add new paper (admin function)
-    function addPaper() {
-      const title = document.getElementById('paperTitle').value;
-      const authors = document.getElementById('paperAuthors').value;
-      const abstract = document.getElementById('paperAbstract').value;
-      const keywords = document.getElementById('paperKeywords').value.split(',').map(k => k.trim());
+    function renderPapers() {
+      const list = document.getElementById('papersList');
+      let filtered = papersData;
 
-      if (!title || !authors || !abstract) {
-        alert('Please fill in all required fields');
-        return;
+      if (currentFilter !== 'all') {
+        if (currentFilter.match(/^\d+$/)) {
+          filtered = papersData.filter(p => p.year == currentFilter);
+        } else {
+          filtered = papersData.filter(p => p.tags.includes(currentFilter));
+        }
       }
 
-      const newPaper = {
-        id: papersData.length + 1,
-        title,
-        authors,
-        year: new Date().getFullYear(),
-        venue: "Submitted",
-        abstract,
-        keywords,
-        category: "ml",
-        pdfUrl: "#"
-      };
-
-      papersData.unshift(newPaper);
-      localStorage.setItem('papersData', JSON.stringify(papersData));
-      renderPapers(papersData);
-
-      // Clear form
-      document.getElementById('paperTitle').value = '';
-      document.getElementById('paperAuthors').value = '';
-      document.getElementById('paperAbstract').value = '';
-      document.getElementById('paperKeywords').value = '';
-
-      alert('✅ Paper added successfully!');
+      list.innerHTML = filtered.map(paper => `
+        <div class="paper-card">
+          <div class="paper-title">${paper.title}</div>
+          
+          <div class="paper-meta">
+            <div class="paper-meta-item">👥 <strong>${paper.authors}</strong></div>
+            <div class="paper-meta-item">📅 ${paper.year}</div>
+            <div class="paper-meta-item">🏆 ${paper.venue}</div>
+            <div class="paper-meta-item">📊 ${paper.citations} citations</div>
+          </div>
+          
+          <div class="paper-abstract">
+            <strong>Abstract:</strong> ${paper.abstract}
+          </div>
+          
+          <div class="paper-keywords">
+            ${paper.keywords.map(kw => `<div class="keyword-tag">${kw}</div>`).join('')}
+          </div>
+          
+          <div class="paper-actions">
+            <a href="${paper.url}" target="_blank" class="btn">📖 Read on arXiv</a>
+            <button class="btn btn-secondary" onclick="downloadPaper('${paper.title}')">📥 Download PDF</button>
+          </div>
+        </div>
+      `).join('');
     }
 
-    // Check admin mode
-    function checkAdminMode() {
-      if (localStorage.getItem('adminMode') === 'true') {
-        document.getElementById('adminSection').style.display = 'block';
-      }
+    function downloadPaper(title) {
+      alert('📥 Downloading: ' + title + '\n\n(In production, this would download the PDF file)');
     }
 
-    // Admin modal
     function openAdminModal() {
       const password = prompt('🔐 Enter admin password:');
       if (password === 'Philo518sophy') {
         localStorage.setItem('adminMode', 'true');
-        checkAdminMode();
+        document.getElementById('adminSection').style.display = 'block';
         alert('✅ Admin mode activated!');
       } else if (password) {
         alert('❌ Invalid password');
       }
     }
 
-    // Load from localStorage if exists
-    const storedPapers = localStorage.getItem('papersData');
-    if (storedPapers) {
-      const papers = JSON.parse(storedPapers);
-      renderPapers(papers);
-    } else {
-      renderPapers(papersData);
+    function addPaper(event) {
+      event.preventDefault();
+      
+      const title = document.getElementById('paperTitle').value;
+      const authors = document.getElementById('paperAuthors').value;
+      const year = parseInt(document.getElementById('paperYear').value);
+      const venue = document.getElementById('paperVenue').value;
+      const abstract = document.getElementById('paperAbstract').value;
+      const keywords = document.getElementById('paperKeywords').value.split(',').map(k => k.trim());
+      
+      const newPaper = {
+        id: papersData.length + 1,
+        title,
+        authors,
+        year,
+        venue,
+        abstract,
+        keywords,
+        citations: 0,
+        tags: ['ml'],
+        url: '#'
+      };
+      
+      papersData.unshift(newPaper);
+      alert('✅ Paper added successfully!');
+      event.target.reset();
+      renderPapers();
     }
 
-    checkAdminMode();
+    // Check admin mode on load
+    if (localStorage.getItem('adminMode') === 'true') {
+      document.getElementById('adminSection').style.display = 'block';
+    }
+
+    // Initialize
+    renderPapers();
   </script>
 </body>
 </html>

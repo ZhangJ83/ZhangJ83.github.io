@@ -94,7 +94,7 @@ title: Forum
     
     .forum-wrapper {
       display: grid;
-      grid-template-columns: 250px 1fr;
+      grid-template-columns: 220px 1fr;
       gap: 30px;
     }
     
@@ -104,6 +104,8 @@ title: Forum
       border-radius: 8px;
       box-shadow: var(--shadow);
       height: fit-content;
+      position: sticky;
+      top: 80px;
     }
     
     .sidebar h3 {
@@ -128,6 +130,7 @@ title: Forum
       text-align: left;
       transition: all 0.3s;
       font-weight: 500;
+      font-size: 0.95rem;
     }
     
     .category-btn:hover {
@@ -180,10 +183,6 @@ title: Forum
       background: #2980b9;
     }
     
-    .btn-primary {
-      background: var(--secondary);
-    }
-    
     .thread-item {
       display: flex;
       justify-content: space-between;
@@ -217,11 +216,12 @@ title: Forum
       gap: 15px;
       font-size: 0.85rem;
       color: #999;
+      flex-wrap: wrap;
     }
     
     .thread-stats {
       text-align: right;
-      min-width: 80px;
+      min-width: 100px;
     }
     
     .stat {
@@ -234,7 +234,6 @@ title: Forum
       color: var(--secondary);
     }
     
-    /* Modal */
     .modal {
       display: none;
       position: fixed;
@@ -253,7 +252,7 @@ title: Forum
       padding: 30px;
       border-radius: 8px;
       width: 90%;
-      max-width: 600px;
+      max-width: 700px;
       box-shadow: var(--shadow);
     }
     
@@ -264,6 +263,10 @@ title: Forum
       margin-bottom: 20px;
       border-bottom: 2px solid var(--secondary);
       padding-bottom: 15px;
+    }
+    
+    .modal-header h3 {
+      color: var(--primary);
     }
     
     .close {
@@ -326,6 +329,15 @@ title: Forum
       color: var(--text);
     }
     
+    .posts-container {
+      max-height: 400px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+      padding: 15px;
+      background: var(--light);
+      border-radius: 6px;
+    }
+    
     footer {
       background: var(--primary);
       color: white;
@@ -334,12 +346,29 @@ title: Forum
       margin-top: 40px;
     }
     
+    .page-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .page-header h1 {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+    
+    .page-header p {
+      color: #666;
+    }
+    
     @media (max-width: 768px) {
       .forum-wrapper {
         grid-template-columns: 1fr;
       }
       
       .sidebar {
+        position: relative;
+        top: 0;
         display: flex;
         gap: 10px;
         overflow-x: auto;
@@ -368,6 +397,11 @@ title: Forum
   </nav>
 
   <div class="container">
+    <div class="page-header">
+      <h1>💬 Research Community Forum</h1>
+      <p>Join discussions about AI, machine learning, research opportunities, and more</p>
+    </div>
+
     <div class="forum-wrapper">
       <!-- Sidebar -->
       <div class="sidebar">
@@ -400,23 +434,23 @@ title: Forum
           <label>Category:</label>
           <select id="threadCategory" required>
             <option value="">Select category</option>
-            <option value="cs-frontier">Computer Science Frontier</option>
-            <option value="ai-ethics">AI Ethics Discussion</option>
-            <option value="job-seeking">Job Seeking & Recruitment</option>
-            <option value="research">Research Collaboration</option>
+            <option value="cs-frontier">🖥️ CS Frontier</option>
+            <option value="ai-ethics">⚖️ AI Ethics Discussion</option>
+            <option value="job-seeking">💼 Job Seeking & Recruitment</option>
+            <option value="research">🔬 Research Collaboration</option>
           </select>
         </div>
         <div class="form-group">
           <label>Thread Title:</label>
-          <input type="text" id="threadTitle" placeholder="Enter thread title" required>
+          <input type="text" id="threadTitle" placeholder="Enter an informative title" required>
         </div>
         <div class="form-group">
           <label>Content:</label>
-          <textarea id="threadContent" placeholder="Write your post..." required></textarea>
+          <textarea id="threadContent" placeholder="Share your thoughts, questions, or ideas..." required></textarea>
         </div>
         <div class="form-group">
-          <label>Username:</label>
-          <input type="text" id="threadAuthor" placeholder="Your name" required>
+          <label>Your Name:</label>
+          <input type="text" id="threadAuthor" placeholder="How should we refer to you?" required>
         </div>
         <button type="submit" class="btn" style="width: 100%;">Create Thread</button>
       </form>
@@ -431,15 +465,18 @@ title: Forum
         <span class="close" onclick="closeReplyModal()">&times;</span>
       </div>
       
-      <div id="originalPost" style="margin-bottom: 20px; padding: 15px; background: var(--light); border-radius: 6px;"></div>
+      <div id="originalPost" style="margin-bottom: 20px; padding: 15px; background: var(--light); border-radius: 6px; border-left: 4px solid var(--secondary);"></div>
+
+      <h4 style="margin-bottom: 15px;">Recent Replies:</h4>
+      <div class="posts-container" id="repliesContainer"></div>
       
       <form onsubmit="createReply(event)">
         <div class="form-group">
           <label>Your Reply:</label>
-          <textarea id="replyContent" placeholder="Write your reply..." required></textarea>
+          <textarea id="replyContent" placeholder="Share your response..." required></textarea>
         </div>
         <div class="form-group">
-          <label>Username:</label>
+          <label>Your Name:</label>
           <input type="text" id="replyAuthor" placeholder="Your name" required>
         </div>
         <button type="submit" class="btn" style="width: 100%;">Post Reply</button>
@@ -454,74 +491,156 @@ title: Forum
 
   <script>
     const categories = [
-      { id: 'cs-frontier', name: '🖥️ CS Frontier', emoji: '🖥️' },
-      { id: 'ai-ethics', name: '⚖️ AI Ethics', emoji: '⚖️' },
-      { id: 'job-seeking', name: '💼 Jobs', emoji: '💼' },
-      { id: 'research', name: '🔬 Research', emoji: '🔬' }
+      { id: 'cs-frontier', name: '🖥️ CS Frontier', fullName: 'Computer Science Frontiers' },
+      { id: 'ai-ethics', name: '⚖️ AI Ethics', fullName: 'AI Ethics Discussion' },
+      { id: 'job-seeking', name: '💼 Jobs', fullName: 'Job Seeking & Recruitment' },
+      { id: 'research', name: '🔬 Research', fullName: 'Research Collaboration' }
     ];
 
     let threadsData = [
       {
         id: 1,
         category: 'cs-frontier',
-        title: 'Latest Developments in Quantum Computing',
+        title: 'Latest Breakthroughs in Quantum Computing - Google\'s New Chip',
         author: 'Dr. Alice Wang',
-        date: '2025-01-15',
-        replies: 8,
-        views: 245,
+        date: '2025-01-20',
+        replies: 15,
+        views: 342,
         posts: [
           {
             author: 'Dr. Alice Wang',
-            date: '2025-01-15 10:30',
-            content: 'What are your thoughts on the recent Google quantum breakthrough? This could revolutionize cryptography...'
+            date: '2025-01-20 10:30 AM',
+            content: 'Google recently announced their new quantum processor with 100 qubits and error correction capabilities. This could be a major breakthrough. What are your thoughts on the implications for cryptography and optimization problems?'
+          },
+          {
+            author: 'Prof. Bob Smith',
+            date: '2025-01-20 11:15 AM',
+            content: 'Exciting news! However, we need to be cautious about the error rates. Real quantum advantage will require much lower error thresholds. Still, this is great progress.'
+          },
+          {
+            author: 'Emma Johnson',
+            date: '2025-01-20 2:45 PM',
+            content: 'Has anyone tested their quantum cloud API? I\'d love to hear practical experiences with the performance.'
           }
         ]
       },
       {
         id: 2,
         category: 'ai-ethics',
-        title: 'Ethical Considerations in Large Language Models',
-        author: 'Prof. John Smith',
-        date: '2025-01-14',
-        replies: 12,
-        views: 356,
+        title: 'Ethical Considerations in Training LLMs - Environmental Impact',
+        author: 'Prof. John Anderson',
+        date: '2025-01-19',
+        replies: 23,
+        views: 501,
         posts: [
           {
-            author: 'Prof. John Smith',
-            date: '2025-01-14 14:20',
-            content: 'As LLMs become more powerful, we must address bias, privacy, and accountability issues. Open discussion welcome.'
+            author: 'Prof. John Anderson',
+            date: '2025-01-19 9:00 AM',
+            content: 'Training state-of-the-art LLMs requires massive computational resources, consuming enormous amounts of electricity. How do we balance innovation with environmental responsibility? What sustainable practices can we adopt?'
+          },
+          {
+            author: 'Dr. Carol Davis',
+            date: '2025-01-19 10:20 AM',
+            content: 'This is crucial. We need to report carbon footprint metrics for model training. Some labs are already using renewable energy sources. We should make this standard practice.'
+          },
+          {
+            author: 'Michael Chen',
+            date: '2025-01-19 3:30 PM',
+            content: 'Model efficiency techniques like knowledge distillation and quantization can significantly reduce computational costs. More research needed in this area.'
+          },
+          {
+            author: 'Lisa Park',
+            date: '2025-01-19 5:15 PM',
+            content: 'Great point about environmental impact. We also need to consider fair labor practices in data annotation and model development.'
           }
         ]
       },
       {
         id: 3,
         category: 'job-seeking',
-        title: 'PhD Opportunities in Machine Learning',
+        title: 'Research Scientist Openings at Major Tech Companies - 2025',
         author: 'HR Department',
-        date: '2025-01-12',
-        replies: 5,
-        views: 189,
+        date: '2025-01-18',
+        replies: 34,
+        views: 612,
         posts: [
           {
             author: 'HR Department',
-            date: '2025-01-12 09:00',
-            content: 'We are recruiting PhD students for ML research. Applications open until March 31, 2025.'
+            date: '2025-01-18 9:00 AM',
+            content: 'We\'re hiring! Research Scientist positions available at leading AI labs. Experience with LLMs, computer vision, or NLP preferred. Competitive salary and benefits. Contact us at careers@company.com'
+          },
+          {
+            author: 'David Wilson',
+            date: '2025-01-18 11:30 AM',
+            content: 'What\'s the typical career progression for research scientists? Any mentorship programs?'
+          },
+          {
+            author: 'Sophia Martinez',
+            date: '2025-01-18 1:45 PM',
+            content: 'Interested! Are remote positions available? Also curious about work-life balance in research labs.'
           }
         ]
       },
       {
         id: 4,
         category: 'research',
-        title: 'Federated Learning Collaboration',
-        author: 'Dr. Bob Johnson',
-        date: '2025-01-10',
-        replies: 6,
-        views: 167,
+        title: 'Collaborative Project: Privacy-Preserving ML - Looking for Partners',
+        author: 'Dr. Robert Zhang',
+        date: '2025-01-17',
+        replies: 8,
+        views: 198,
         posts: [
           {
-            author: 'Dr. Bob Johnson',
-            date: '2025-01-10 11:45',
-            content: 'Looking for collaborators on federated learning projects. Anyone interested in joint research?'
+            author: 'Dr. Robert Zhang',
+            date: '2025-01-17 10:00 AM',
+            content: 'Starting a multi-institutional research project on privacy-preserving machine learning. We\'re looking for PhD students and postdocs interested in federated learning and differential privacy. If interested, please reply with your research interests.'
+          },
+          {
+            author: 'Grace Lee',
+            date: '2025-01-17 2:30 PM',
+            content: 'Very interested! I have experience with differential privacy. What\'s the timeline and funding situation?'
+          }
+        ]
+      },
+      {
+        id: 5,
+        category: 'cs-frontier',
+        title: 'Vision Transformers vs CNNs: Which is Better for Edge Devices?',
+        author: 'Dr. Frank Liu',
+        date: '2025-01-16',
+        replies: 12,
+        views: 287,
+        posts: [
+          {
+            author: 'Dr. Frank Liu',
+            date: '2025-01-16 3:00 PM',
+            content: 'I\'ve been experimenting with deploying both Vision Transformers and CNNs on edge devices. ViTs are more accurate but have higher latency. Any tips for optimization?'
+          },
+          {
+            author: 'Jennifer Tang',
+            date: '2025-01-16 4:15 PM',
+            content: 'Knowledge distillation from ViT to a smaller CNN might work well. Also check out efficient ViT variants like DeiT and MobileViT.'
+          }
+        ]
+      },
+      {
+        id: 6,
+        category: 'ai-ethics',
+        title: 'Algorithmic Bias in Hiring Systems - Legal and Practical Concerns',
+        author: 'Prof. Michelle Garcia',
+        date: '2025-01-15',
+        replies: 19,
+        views: 445,
+        posts: [
+          {
+            author: 'Prof. Michelle Garcia',
+            date: '2025-01-15 11:00 AM',
+            content: 'Several companies have faced lawsuits due to biased hiring algorithms. How can we ensure fairness in recruitment systems? What are best practices?'
+          },
+          {
+            author: 'Dr. Kevin Brown',
+            date: '2025-01-15 12:30 PM',
+            content: 'Transparency and regular auditing are essential. We need diverse teams developing and testing these systems.'
           }
         ]
       }
@@ -530,7 +649,6 @@ title: Forum
     let currentCategory = 'cs-frontier';
     let currentThreadId = null;
 
-    // Render categories
     function renderCategories() {
       const list = document.getElementById('categoryList');
       list.innerHTML = '';
@@ -549,16 +667,22 @@ title: Forum
       });
     }
 
-    // Render threads
     function renderThreads() {
       const list = document.getElementById('threadsList');
       const title = document.getElementById('forumTitle');
       
       const category = categories.find(c => c.id === currentCategory);
-      title.textContent = category.name;
+      title.textContent = category.fullName;
       
-      const filtered = threadsData.filter(t => t.category === currentCategory);
+      const filtered = threadsData.filter(t => t.category === currentCategory)
+        .sort((a, b) => new Date(b.date) - new Date(a.date));
+      
       list.innerHTML = '';
+      
+      if (filtered.length === 0) {
+        list.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">No threads yet. Be the first to start a discussion!</p>';
+        return;
+      }
       
       filtered.forEach(thread => {
         const item = document.createElement('div');
@@ -571,11 +695,12 @@ title: Forum
             <div class="thread-meta">
               <span>👤 ${thread.author}</span>
               <span>📅 ${thread.date}</span>
+              <span>👁️ ${thread.views} views</span>
             </div>
           </div>
           <div class="thread-stats">
-            <div class="stat"><span class="stat-number">${thread.replies}</span> replies</div>
-            <div class="stat"><span class="stat-number">${thread.views}</span> views</div>
+            <div class="stat">💬 <span class="stat-number">${thread.replies}</span></div>
+            <div style="font-size: 0.8rem; color: #999;">replies</div>
           </div>
         `;
         
@@ -583,24 +708,34 @@ title: Forum
       });
     }
 
-    // Thread detail modal (simplified)
     function openThreadDetail(threadId) {
       const thread = threadsData.find(t => t.id === threadId);
       currentThreadId = threadId;
       
       const detail = `
-        <div style="margin-bottom: 20px; padding: 15px; background: var(--light); border-radius: 6px;">
-          <h3 style="margin-bottom: 10px;">${thread.title}</h3>
-          <p style="color: #999; margin-bottom: 10px;">👤 ${thread.author} • ${thread.date}</p>
-          <p>${thread.posts[0].content}</p>
+        <div>
+          <h4 style="margin-bottom: 10px; color: var(--secondary);">${thread.title}</h4>
+          <p style="color: #999; margin-bottom: 12px; font-size: 0.9rem;">👤 ${thread.posts[0].author} • ${thread.posts[0].date}</p>
+          <p style="line-height: 1.7;">${thread.posts[0].content}</p>
         </div>
       `;
       
       document.getElementById('originalPost').innerHTML = detail;
+
+      // Show other replies
+      const repliesHtml = thread.posts.slice(1).map(post => `
+        <div class="post">
+          <div class="post-author">👤 ${post.author}</div>
+          <div class="post-time">⏰ ${post.date}</div>
+          <div class="post-content">${post.content}</div>
+        </div>
+      `).join('');
+      
+      document.getElementById('repliesContainer').innerHTML = repliesHtml || '<p style="color: #999; text-align: center;">No replies yet</p>';
+      
       document.getElementById('replyModal').style.display = 'block';
     }
 
-    // Create thread
     function createThread(event) {
       event.preventDefault();
       
@@ -616,7 +751,7 @@ title: Forum
         author,
         date: new Date().toISOString().split('T')[0],
         replies: 0,
-        views: 0,
+        views: 1,
         posts: [{
           author,
           date: new Date().toLocaleString(),
@@ -625,7 +760,6 @@ title: Forum
       };
       
       threadsData.unshift(newThread);
-      localStorage.setItem('threadsData', JSON.stringify(threadsData));
       
       event.target.reset();
       closeNewThreadModal();
@@ -633,7 +767,6 @@ title: Forum
       alert('✅ Thread created successfully!');
     }
 
-    // Create reply
     function createReply(event) {
       event.preventDefault();
       
@@ -648,14 +781,13 @@ title: Forum
       });
       
       thread.replies += 1;
-      localStorage.setItem('threadsData', JSON.stringify(threadsData));
       
       event.target.reset();
       closeReplyModal();
+      renderThreads();
       alert('✅ Reply posted successfully!');
     }
 
-    // Modal functions
     function openNewThreadModal() {
       document.getElementById('newThreadModal').style.display = 'block';
     }
@@ -668,7 +800,6 @@ title: Forum
       document.getElementById('replyModal').style.display = 'none';
     }
 
-    // Admin
     function openAdminModal() {
       const password = prompt('🔐 Enter admin password:');
       if (password === 'Philo518sophy') {
@@ -679,13 +810,6 @@ title: Forum
       }
     }
 
-    // Load from localStorage
-    const stored = localStorage.getItem('threadsData');
-    if (stored) {
-      threadsData = JSON.parse(stored);
-    }
-
-    // Close modals on outside click
     window.onclick = function(event) {
       const newThreadModal = document.getElementById('newThreadModal');
       const replyModal = document.getElementById('replyModal');
@@ -694,7 +818,6 @@ title: Forum
       if (event.target === replyModal) replyModal.style.display = 'none';
     }
 
-    // Initialize
     renderCategories();
     renderThreads();
   </script>

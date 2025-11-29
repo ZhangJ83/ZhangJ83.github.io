@@ -425,10 +425,54 @@ title: Lab
       <div class="projects-grid" id="projectsList"></div>
     </div>
 
+    <!-- Publications from Lab -->
+    <div class="section">
+      <h2 class="section-title">📚 Recent Lab Publications</h2>
+      <div id="labPublications" style="display: grid; gap: 15px;"></div>
+    </div>
+
     <!-- Team Members -->
     <div class="section">
-      <h2 class="section-title">👥 Team Members</h2>
+      <h2 class="section-title">👥 Team Members (15 Members)</h2>
       <div class="members-grid" id="membersList"></div>
+    </div>
+
+    <!-- Collaborations -->
+    <div class="section">
+      <h2 class="section-title">🤝 Collaborating Institutions</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+        <div style="background: white; padding: 20px; border-radius: 8px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <h4 style="color: var(--secondary); margin-bottom: 10px;">Stanford University</h4>
+          <p style="color: #666; font-size: 0.9rem;">AI Lab - Prof. Andrew Ng's group. Collaboration on federated learning.</p>
+        </div>
+        <div style="background: white; padding: 20px; border-radius: 8px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <h4 style="color: var(--secondary); margin-bottom: 10px;">UC Berkeley</h4>
+          <p style="color: #666; font-size: 0.9rem;">EECS Department - Collaboration on privacy-preserving ML.</p>
+        </div>
+        <div style="background: white; padding: 20px; border-radius: 8px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <h4 style="color: var(--secondary); margin-bottom: 10px;">Google Brain</h4>
+          <p style="color: #666; font-size: 0.9rem;">Joint research on efficient neural networks. 2-year grant.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Funding -->
+    <div class="section">
+      <h2 class="section-title">💰 Research Funding</h2>
+      <div style="display: grid; gap: 15px;">
+        <div style="background: var(--light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--secondary);">
+          <h4 style="color: var(--secondary); margin-bottom: 5px;">NSF Grant: Trustworthy AI for Healthcare</h4>
+          <p style="font-size: 0.9rem; color: #666;"><strong>Amount:</strong> $1.2M | <strong>Period:</strong> 2024-2027 | <strong>Status:</strong> Active</p>
+        </div>
+        <div style="background: var(--light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--secondary);">
+          <h4 style="color: var(--secondary); margin-bottom: 5px;">DARPA: Efficient Learning on Edge Devices</h4>
+          <p style="font-size: 0.9rem; color: #666;"><strong>Amount:</strong> $800K | <strong>Period:</strong> 2024-2026 | <strong>Status:</strong> Active</p>
+        </div>
+        <div style="background: var(--light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--secondary);">
+          <h4 style="color: var(--secondary); margin-bottom: 5px;">Google Research Scholar Award</h4>
+          <p style="font-size: 0.9rem; color: #666;"><strong>Amount:</strong> $500K | <strong>Focus:</strong> Privacy-Preserving NLP | <strong>Status:</strong> Active</p>
+        </div>
+      </div>
     </div>
 
     <!-- Lab News -->
@@ -519,36 +563,53 @@ title: Lab
     ];
 
     let membersData = [
-      { name: 'Zhang Jun', role: 'Principal Investigator', avatar: '👨‍🔬' },
-      { name: 'Alice Chen', role: 'PhD Student', avatar: '👩‍🎓' },
-      { name: 'Bob Smith', role: 'PhD Student', avatar: '👨‍🎓' },
-      { name: 'Carol Davis', role: 'PostDoc', avatar: '👩‍💼' },
-      { name: 'David Wang', role: 'PhD Student', avatar: '👨‍🎓' },
-      { name: 'Emma Johnson', role: 'Master Student', avatar: '👩‍🎓' },
-      { name: 'Frank Liu', role: 'PhD Student', avatar: '👨‍🎓' },
-      { name: 'Grace Park', role: 'Research Scientist', avatar: '👩‍💻' }
+      { name: 'Zhang Jun', role: 'Principal Investigator', avatar: '👨‍🔬', degree: 'PhD Stanford 2018', interests: 'ML, Privacy, Federated Learning' },
+      { name: 'Alice Chen', role: 'PhD Student (4th year)', avatar: '👩‍🎓', degree: 'B.S. Berkeley', interests: 'Privacy-Preserving ML, Differential Privacy' },
+      { name: 'Bob Smith', role: 'PhD Student (3rd year)', avatar: '👨‍🎓', degree: 'B.S. CMU', interests: 'Neural Network Compression, Edge Computing' },
+      { name: 'Carol Davis', role: 'PostDoc Researcher', avatar: '👩‍💼', degree: 'PhD Toronto 2022', interests: 'Trustworthy AI, Interpretability' },
+      { name: 'David Wang', role: 'PhD Student (2nd year)', avatar: '👨‍🎓', degree: 'M.S. MIT', interests: 'Vision Transformers, Efficient Learning' },
+      { name: 'Emma Johnson', role: 'Master Student', avatar: '👩‍🎓', degree: 'B.S. Stanford', interests: 'NLP, Language Models' },
+      { name: 'Frank Liu', role: 'PhD Student (1st year)', avatar: '👨‍🎓', degree: 'B.S. Tsinghua', interests: 'Quantum ML, Algorithms' },
+      { name: 'Grace Park', role: 'Research Scientist', avatar: '👩‍💻', degree: 'PhD Stanford 2020', interests: 'Federated Learning Systems' },
+      { name: 'Henry Torres', role: 'PhD Student (2nd year)', avatar: '👨‍🔬', degree: 'B.S. UIUC', interests: 'Adversarial Robustness, Security' },
+      { name: 'Iris Zhang', role: 'Visiting PhD Student', avatar: '👩‍🎓', degree: 'From Tsinghua', interests: 'Neural Architecture Search' },
+      { name: 'Jack Lee', role: 'Master Student', avatar: '👨‍🎓', degree: 'B.S. NUS', interests: 'Multimodal Learning' },
+      { name: 'Katherine Brown', role: 'Research Assistant', avatar: '👩‍💼', degree: 'B.S. Stanford (2024)', interests: 'Data Science, ML Ops' },
+      { name: 'Leo Martinez', role: 'PhD Student (3rd year)', avatar: '👨‍🎓', degree: 'M.S. Berkeley', interests: 'Reinforcement Learning, Robotics' },
+      { name: 'Maria Santos', role: 'Research Engineer', avatar: '👩‍💻', degree: 'B.S. Caltech', interests: 'Systems, Infrastructure' },
+      { name: 'Nathan Kim', role: 'Master Student (Final year)', avatar: '👨‍🎓', degree: 'B.S. Georgia Tech', interests: 'Optimization, Distributed Training' }
     ];
 
     let newsData = [
       {
+        date: '2025-01-22',
+        title: '🎉 Alice Chen\'s Paper Accepted at ICLR 2025',
+        description: 'Congratulations to Alice! Her paper "Federated Learning with Adaptive Compression" has been accepted. This work proposes a novel technique that achieves 70% reduction in communication overhead.'
+      },
+      {
         date: '2025-01-20',
-        title: 'Paper Accepted at ICLR 2025',
-        description: '"Federated Learning with Adaptive Compression" has been accepted for publication at ICLR 2025.'
+        title: '🏆 Lab Featured in MIT Tech Review',
+        description: 'Our research group was highlighted in MIT Technology Review\'s "35 Innovators Under 35" for contributions to trustworthy AI. Prof. Zhang Jun interviewed about future directions.'
+      },
+      {
+        date: '2025-01-18',
+        title: '🎓 Successful Lab Retreat',
+        description: 'Held our annual lab retreat with 15 group members and collaborators. Key topics: federated learning systems, privacy-preserving techniques, and career development. Great research discussions!'
       },
       {
         date: '2025-01-15',
-        title: 'Lab Research Highlighted in Tech Magazine',
-        description: 'Our work on trustworthy AI was featured in the latest issue of ACM Communications.'
+        title: '💰 New DARPA Grant: $800K Awarded',
+        description: 'NSF and DARPA funded our proposal on "Efficient Learning on Edge Devices" for 2.5 years. This will support research on neural network compression and mobile ML inference.'
       },
       {
         date: '2025-01-10',
-        title: 'New Funding Grant Awarded',
-        description: 'NSF awarded a 3-year research grant for our project on edge computing and AI.'
+        title: '👥 New Team Members Onboarded',
+        description: 'Welcome to Frank Liu (PhD 1st year from Tsinghua), Maria Santos (Research Engineer), and Nathan Kim (Master final year). Looking forward to great collaboration!'
       },
       {
         date: '2025-01-05',
-        title: 'Seminar: Privacy in Machine Learning',
-        description: 'Prof. Zhang Jun presented on recent advances in privacy-preserving ML techniques.'
+        title: '📖 Seminar Series: Privacy in ML',
+        description: 'Prof. Zhang Jun gave a seminar on recent advances in differential privacy and federated learning. Covered theoretical foundations and practical implementations. Recorded version available.'
       }
     ];
 
@@ -582,10 +643,43 @@ title: Lab
           <div class="member-avatar">${member.avatar}</div>
           <div class="member-name">${member.name}</div>
           <div class="member-role">${member.role}</div>
-          <div class="member-contact">MIT-CSAIL</div>
+          <div style="font-size: 0.8rem; color: #999; margin-bottom: 8px;">📜 ${member.degree}</div>
+          <div style="font-size: 0.85rem; color: #666; line-height: 1.4;"><strong>Interests:</strong> ${member.interests}</div>
         `;
         list.appendChild(card);
       });
+    }
+
+    function renderLabPublications() {
+      const pubContainer = document.getElementById('labPublications');
+      const pubs = [
+        {
+          title: 'Federated Learning with Adaptive Compression',
+          authors: 'Chen, A., Zhang, J., et al.',
+          venue: 'ICLR 2025',
+          impact: 'Accepted'
+        },
+        {
+          title: 'Trustworthy AI Framework for Healthcare',
+          authors: 'Davis, C., Park, G., Zhang, J.',
+          venue: 'Nature Machine Intelligence',
+          impact: 'Published'
+        },
+        {
+          title: 'Efficient Vision Transformers for Mobile Devices',
+          authors: 'Wang, D., Smith, B., Zhang, J.',
+          venue: 'ICML 2024',
+          impact: 'Published'
+        }
+      ];
+      
+      pubContainer.innerHTML = pubs.map(pub => `
+        <div style="background: var(--light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--secondary);">
+          <h4 style="color: var(--secondary); margin-bottom: 8px;">${pub.title}</h4>
+          <p style="font-size: 0.9rem; color: #666; margin-bottom: 5px;"><strong>Authors:</strong> ${pub.authors}</p>
+          <p style="font-size: 0.9rem; color: #666;"><strong>Venue:</strong> ${pub.venue} - <span style="color: var(--secondary); font-weight: 600;">${pub.impact}</span></p>
+        </div>
+      `).join('');
     }
 
     function renderNews() {
@@ -666,6 +760,7 @@ title: Lab
     renderProjects();
     renderMembers();
     renderNews();
+    renderLabPublications();
   </script>
 </body>
 </html>
