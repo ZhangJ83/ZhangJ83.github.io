@@ -221,15 +221,36 @@ layout: page
         // compute cover (gradient) and svg thumb
         const coverStyle = makeCoverStyle(course.id || (course.title||'').slice(0,6));
         const svgThumb = makeSVGThumb(course.title || course.id || 'C', course.id || course.title || 'c');
-        // cover + header + desc
-        card.innerHTML = `
-          <div class="card-cover" aria-hidden="true" style="${coverStyle}"><img class="cover-thumb" src="${svgThumb}" alt=""></div>
-          <div class="course-card-header">
-            <h3>${course.title}</h3>
-            <p class="course-meta">${course.instructor} | ${course.credit} 学分 | ${course.semester}</p>
-          </div>
-          <p class="course-desc">${course.desc}</p>
+        
+        // Create cover div
+        const coverDiv = document.createElement('div');
+        coverDiv.className = 'card-cover';
+        coverDiv.style.cssText = coverStyle;
+        const img = document.createElement('img');
+        img.className = 'cover-thumb';
+        img.src = svgThumb;
+        img.alt = '';
+        coverDiv.appendChild(img);
+        
+        // Create header and content container
+        const contentDiv = document.createElement('div');
+        contentDiv.style.cssText = 'flex:1;display:flex;flex-direction:column;gap:6px;';
+        
+        const header = document.createElement('div');
+        header.className = 'course-card-header';
+        header.innerHTML = `
+          <h3>${course.title}</h3>
+          <p class="course-meta">${course.instructor} | ${course.credit} 学分 | ${course.semester}</p>
         `;
+        
+        const desc = document.createElement('p');
+        desc.className = 'course-desc';
+        desc.textContent = course.desc;
+        
+        contentDiv.appendChild(header);
+        contentDiv.appendChild(desc);
+        
+        // Create actions
         const btns = document.createElement('div');
         btns.className = 'course-card-actions';
         const viewBtn = document.createElement('button');
@@ -249,6 +270,10 @@ layout: page
           delBtn.addEventListener('click', ()=>{ if(confirm('删除此课程?')){ cat.courses = cat.courses.filter(c=>c.id!==course.id); saveLocal(data); renderCourseView(cat, data); } });
           btns.appendChild(delBtn);
         }
+        
+        // Assemble card: cover + content + actions
+        card.appendChild(coverDiv);
+        card.appendChild(contentDiv);
         card.appendChild(btns);
         grid.appendChild(card);
       });
