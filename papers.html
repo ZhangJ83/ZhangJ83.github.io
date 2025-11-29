@@ -1,0 +1,498 @@
+---
+layout: default
+title: Papers
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Papers - Zhang Jun</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --primary: #2c3e50;
+      --secondary: #3498db;
+      --accent: #e74c3c;
+      --light: #ecf0f1;
+      --text: #2c3e50;
+      --border: #bdc3c7;
+      --shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+      background: #f8f9fa;
+    }
+    
+    nav.main-nav {
+      background: white;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+    }
+    
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+      list-style: none;
+    }
+    
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    
+    .nav-links a:hover {
+      color: var(--secondary);
+    }
+    
+    .nav-links .btn-admin {
+      padding: 8px 16px;
+      background: var(--accent);
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      border: none;
+      font-weight: 500;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .page-header h1 {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+    
+    .page-header p {
+      color: #666;
+      font-size: 1.05rem;
+    }
+    
+    .filter-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+    
+    .filter-btn {
+      padding: 10px 20px;
+      border: 2px solid var(--secondary);
+      background: white;
+      color: var(--secondary);
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+    
+    .filter-btn.active {
+      background: var(--secondary);
+      color: white;
+    }
+    
+    .filter-btn:hover {
+      background: var(--secondary);
+      color: white;
+    }
+    
+    .paper-item {
+      background: white;
+      padding: 25px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      border-left: 4px solid var(--secondary);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .paper-item:hover {
+      transform: translateX(5px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    
+    .paper-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+    
+    .paper-meta {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .paper-meta span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .paper-abstract {
+      margin: 15px 0;
+      line-height: 1.8;
+      color: #555;
+    }
+    
+    .paper-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 15px 0;
+    }
+    
+    .tag {
+      background: var(--light);
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      color: var(--secondary);
+      font-weight: 500;
+    }
+    
+    .paper-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background: var(--secondary);
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.3s;
+      cursor: pointer;
+      border: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    
+    .btn:hover {
+      background: #2980b9;
+    }
+    
+    .btn-secondary {
+      background: #95a5a6;
+    }
+    
+    .btn-secondary:hover {
+      background: #7f8c8d;
+    }
+    
+    footer {
+      background: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+    
+    .admin-section {
+      background: #fff3cd;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      border-left: 4px solid #ffc107;
+    }
+    
+    .admin-section h3 {
+      color: #856404;
+      margin-bottom: 10px;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: inherit;
+    }
+    
+    @media (max-width: 768px) {
+      .page-header h1 {
+        font-size: 1.8rem;
+      }
+      
+      .filter-tabs {
+        flex-direction: column;
+      }
+      
+      .filter-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="main-nav">
+    <div class="nav-container">
+      <a href="/" class="logo">🎓 Zhang Jun</a>
+      <ul class="nav-links">
+        <li><a href="/papers.html">📄 Papers</a></li>
+        <li><a href="/courses.html">📚 Courses</a></li>
+        <li><a href="/forum.html">💬 Forum</a></li>
+        <li><a href="/lab.html">🔬 Lab</a></li>
+        <li><a href="/company.html">🏢 Company</a></li>
+        <li><button class="btn-admin" onclick="openAdminModal()">🔐 Admin</button></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1>📄 Academic Papers</h1>
+      <p>Published research in machine learning, AI, and computer science</p>
+    </div>
+
+    <!-- Admin Upload Section -->
+    <div id="adminSection" class="admin-section" style="display: none;">
+      <h3>📝 Admin: Upload New Paper</h3>
+      <div class="form-group">
+        <label>Paper Title:</label>
+        <input type="text" id="paperTitle" placeholder="Enter paper title">
+      </div>
+      <div class="form-group">
+        <label>Authors:</label>
+        <input type="text" id="paperAuthors" placeholder="Author1, Author2, ...">
+      </div>
+      <div class="form-group">
+        <label>Abstract:</label>
+        <textarea id="paperAbstract" placeholder="Enter abstract" rows="4"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Keywords:</label>
+        <input type="text" id="paperKeywords" placeholder="keyword1, keyword2, ...">
+      </div>
+      <div class="form-group">
+        <label>PDF File:</label>
+        <input type="file" id="paperPDF" accept=".pdf">
+      </div>
+      <button class="btn" onclick="addPaper()">➕ Add Paper</button>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs">
+      <button class="filter-btn active" onclick="filterPapers('all')">All Papers</button>
+      <button class="filter-btn" onclick="filterPapers('2024')">2024</button>
+      <button class="filter-btn" onclick="filterPapers('2023')">2023</button>
+      <button class="filter-btn" onclick="filterPapers('ml')">Machine Learning</button>
+      <button class="filter-btn" onclick="filterPapers('nlp')">NLP</button>
+    </div>
+
+    <!-- Papers List -->
+    <div id="papersList"></div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Zhang Jun. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Sample papers data
+    const papersData = [
+      {
+        id: 1,
+        title: "Efficient Federated Learning with Differential Privacy",
+        authors: "Zhang, J., Smith, A., Johnson, B.",
+        year: 2024,
+        venue: "NeurIPS 2024",
+        abstract: "We propose a novel federated learning algorithm that preserves differential privacy while maintaining convergence guarantees. Our method reduces communication overhead by 40% compared to existing approaches.",
+        keywords: ["Federated Learning", "Differential Privacy", "Distributed Training"],
+        category: "ml",
+        pdfUrl: "/assets/papers/paper1.pdf"
+      },
+      {
+        id: 2,
+        title: "Language Models as Few-Shot Learners for Code Generation",
+        authors: "Zhang, J., Chen, L., Wang, X.",
+        year: 2024,
+        venue: "ICML 2024",
+        abstract: "We investigate the capability of large language models in few-shot code generation tasks. Our findings show that models trained on diverse code repositories outperform domain-specific models.",
+        keywords: ["Language Models", "Code Generation", "Few-Shot Learning"],
+        category: "nlp",
+        pdfUrl: "/assets/papers/paper2.pdf"
+      },
+      {
+        id: 3,
+        title: "Vision Transformers for Medical Image Analysis",
+        authors: "Zhang, J., Lee, S., Kumar, A.",
+        year: 2023,
+        venue: "ICCV 2023",
+        abstract: "We adapt vision transformers for medical image analysis with improved attention mechanisms. The proposed method achieves 95% accuracy on chest X-ray classification.",
+        keywords: ["Vision Transformers", "Medical Imaging", "Computer Vision"],
+        category: "ml",
+        pdfUrl: "/assets/papers/paper3.pdf"
+      }
+    ];
+
+    // Render papers
+    function renderPapers(papers) {
+      const papersList = document.getElementById('papersList');
+      papersList.innerHTML = '';
+
+      papers.forEach(paper => {
+        const paperHTML = `
+          <div class="paper-item">
+            <div class="paper-title">${paper.title}</div>
+            <div class="paper-meta">
+              <span>✍️ ${paper.authors}</span>
+              <span>📅 ${paper.year}</span>
+              <span>🏆 ${paper.venue}</span>
+            </div>
+            <div class="paper-abstract">${paper.abstract}</div>
+            <div class="paper-tags">
+              ${paper.keywords.map(k => `<span class="tag">${k}</span>`).join('')}
+            </div>
+            <div class="paper-actions">
+              <a href="${paper.pdfUrl}" class="btn" target="_blank">📥 Download PDF</a>
+              <a href="javascript:void(0)" class="btn btn-secondary" onclick="alert('Preview feature coming soon')">👁️ Preview</a>
+            </div>
+          </div>
+        `;
+        papersList.innerHTML += paperHTML;
+      });
+    }
+
+    // Filter papers
+    function filterPapers(filter) {
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      if (filter === 'all') {
+        renderPapers(papersData);
+      } else {
+        renderPapers(papersData.filter(p => p.year == filter || p.category == filter));
+      }
+    }
+
+    // Add new paper (admin function)
+    function addPaper() {
+      const title = document.getElementById('paperTitle').value;
+      const authors = document.getElementById('paperAuthors').value;
+      const abstract = document.getElementById('paperAbstract').value;
+      const keywords = document.getElementById('paperKeywords').value.split(',').map(k => k.trim());
+
+      if (!title || !authors || !abstract) {
+        alert('Please fill in all required fields');
+        return;
+      }
+
+      const newPaper = {
+        id: papersData.length + 1,
+        title,
+        authors,
+        year: new Date().getFullYear(),
+        venue: "Submitted",
+        abstract,
+        keywords,
+        category: "ml",
+        pdfUrl: "#"
+      };
+
+      papersData.unshift(newPaper);
+      localStorage.setItem('papersData', JSON.stringify(papersData));
+      renderPapers(papersData);
+
+      // Clear form
+      document.getElementById('paperTitle').value = '';
+      document.getElementById('paperAuthors').value = '';
+      document.getElementById('paperAbstract').value = '';
+      document.getElementById('paperKeywords').value = '';
+
+      alert('✅ Paper added successfully!');
+    }
+
+    // Check admin mode
+    function checkAdminMode() {
+      if (localStorage.getItem('adminMode') === 'true') {
+        document.getElementById('adminSection').style.display = 'block';
+      }
+    }
+
+    // Admin modal
+    function openAdminModal() {
+      const password = prompt('🔐 Enter admin password:');
+      if (password === 'Philo518sophy') {
+        localStorage.setItem('adminMode', 'true');
+        checkAdminMode();
+        alert('✅ Admin mode activated!');
+      } else if (password) {
+        alert('❌ Invalid password');
+      }
+    }
+
+    // Load from localStorage if exists
+    const storedPapers = localStorage.getItem('papersData');
+    if (storedPapers) {
+      const papers = JSON.parse(storedPapers);
+      renderPapers(papers);
+    } else {
+      renderPapers(papersData);
+    }
+
+    checkAdminMode();
+  </script>
+</body>
+</html>

@@ -1,0 +1,702 @@
+---
+layout: default
+title: Forum
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forum - Zhang Jun</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --primary: #2c3e50;
+      --secondary: #3498db;
+      --accent: #e74c3c;
+      --light: #ecf0f1;
+      --text: #2c3e50;
+      --border: #bdc3c7;
+      --shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+      background: #f8f9fa;
+    }
+    
+    nav.main-nav {
+      background: white;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+    }
+    
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+      list-style: none;
+    }
+    
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    
+    .nav-links a:hover {
+      color: var(--secondary);
+    }
+    
+    .nav-links .btn-admin {
+      padding: 8px 16px;
+      background: var(--accent);
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      border: none;
+      font-weight: 500;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .forum-wrapper {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 30px;
+    }
+    
+    .sidebar {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      height: fit-content;
+    }
+    
+    .sidebar h3 {
+      margin-bottom: 15px;
+      color: var(--primary);
+      font-size: 1.1rem;
+    }
+    
+    .category-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .category-btn {
+      padding: 10px 15px;
+      border: none;
+      background: var(--light);
+      border-left: 4px solid transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.3s;
+      font-weight: 500;
+    }
+    
+    .category-btn:hover {
+      background: var(--secondary);
+      color: white;
+      border-left-color: white;
+    }
+    
+    .category-btn.active {
+      background: var(--secondary);
+      color: white;
+      border-left-color: #fff;
+    }
+    
+    .main-content {
+      background: white;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 30px;
+    }
+    
+    .forum-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      border-bottom: 2px solid var(--secondary);
+      padding-bottom: 20px;
+    }
+    
+    .forum-header h2 {
+      font-size: 1.8rem;
+      color: var(--primary);
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background: var(--secondary);
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.3s;
+      cursor: pointer;
+      border: none;
+      font-weight: 500;
+    }
+    
+    .btn:hover {
+      background: #2980b9;
+    }
+    
+    .btn-primary {
+      background: var(--secondary);
+    }
+    
+    .thread-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin-bottom: 12px;
+      transition: box-shadow 0.3s;
+      cursor: pointer;
+    }
+    
+    .thread-item:hover {
+      box-shadow: var(--shadow);
+      background: #fafafa;
+    }
+    
+    .thread-info {
+      flex: 1;
+    }
+    
+    .thread-title {
+      font-weight: 600;
+      color: var(--secondary);
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+    }
+    
+    .thread-meta {
+      display: flex;
+      gap: 15px;
+      font-size: 0.85rem;
+      color: #999;
+    }
+    
+    .thread-stats {
+      text-align: right;
+      min-width: 80px;
+    }
+    
+    .stat {
+      font-size: 0.9rem;
+      margin-bottom: 5px;
+    }
+    
+    .stat-number {
+      font-weight: 700;
+      color: var(--secondary);
+    }
+    
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      overflow-y: auto;
+    }
+    
+    .modal-content {
+      background-color: white;
+      margin: 20px auto;
+      padding: 30px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: var(--shadow);
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--secondary);
+      padding-bottom: 15px;
+    }
+    
+    .close {
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #aaa;
+    }
+    
+    .close:hover {
+      color: black;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: inherit;
+    }
+    
+    .form-group textarea {
+      min-height: 120px;
+    }
+    
+    .post {
+      background: var(--light);
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      border-left: 4px solid var(--secondary);
+    }
+    
+    .post-author {
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    
+    .post-time {
+      font-size: 0.8rem;
+      color: #999;
+      margin-bottom: 10px;
+    }
+    
+    .post-content {
+      line-height: 1.6;
+      color: var(--text);
+    }
+    
+    footer {
+      background: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+    
+    @media (max-width: 768px) {
+      .forum-wrapper {
+        grid-template-columns: 1fr;
+      }
+      
+      .sidebar {
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+      }
+      
+      .category-list {
+        flex-direction: row;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="main-nav">
+    <div class="nav-container">
+      <a href="/" class="logo">🎓 Zhang Jun</a>
+      <ul class="nav-links">
+        <li><a href="/papers.html">📄 Papers</a></li>
+        <li><a href="/courses.html">📚 Courses</a></li>
+        <li><a href="/forum.html">💬 Forum</a></li>
+        <li><a href="/lab.html">🔬 Lab</a></li>
+        <li><a href="/company.html">🏢 Company</a></li>
+        <li><button class="btn-admin" onclick="openAdminModal()">🔐 Admin</button></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="forum-wrapper">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <h3>📂 Categories</h3>
+        <div class="category-list" id="categoryList"></div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <div class="forum-header">
+          <h2 id="forumTitle">Discussion Forum</h2>
+          <button class="btn" onclick="openNewThreadModal()">➕ New Thread</button>
+        </div>
+        
+        <div id="threadsList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- New Thread Modal -->
+  <div id="newThreadModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Create New Thread</h3>
+        <span class="close" onclick="closeNewThreadModal()">&times;</span>
+      </div>
+      
+      <form onsubmit="createThread(event)">
+        <div class="form-group">
+          <label>Category:</label>
+          <select id="threadCategory" required>
+            <option value="">Select category</option>
+            <option value="cs-frontier">Computer Science Frontier</option>
+            <option value="ai-ethics">AI Ethics Discussion</option>
+            <option value="job-seeking">Job Seeking & Recruitment</option>
+            <option value="research">Research Collaboration</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Thread Title:</label>
+          <input type="text" id="threadTitle" placeholder="Enter thread title" required>
+        </div>
+        <div class="form-group">
+          <label>Content:</label>
+          <textarea id="threadContent" placeholder="Write your post..." required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Username:</label>
+          <input type="text" id="threadAuthor" placeholder="Your name" required>
+        </div>
+        <button type="submit" class="btn" style="width: 100%;">Create Thread</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Reply Modal -->
+  <div id="replyModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Reply to Thread</h3>
+        <span class="close" onclick="closeReplyModal()">&times;</span>
+      </div>
+      
+      <div id="originalPost" style="margin-bottom: 20px; padding: 15px; background: var(--light); border-radius: 6px;"></div>
+      
+      <form onsubmit="createReply(event)">
+        <div class="form-group">
+          <label>Your Reply:</label>
+          <textarea id="replyContent" placeholder="Write your reply..." required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Username:</label>
+          <input type="text" id="replyAuthor" placeholder="Your name" required>
+        </div>
+        <button type="submit" class="btn" style="width: 100%;">Post Reply</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Zhang Jun. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const categories = [
+      { id: 'cs-frontier', name: '🖥️ CS Frontier', emoji: '🖥️' },
+      { id: 'ai-ethics', name: '⚖️ AI Ethics', emoji: '⚖️' },
+      { id: 'job-seeking', name: '💼 Jobs', emoji: '💼' },
+      { id: 'research', name: '🔬 Research', emoji: '🔬' }
+    ];
+
+    let threadsData = [
+      {
+        id: 1,
+        category: 'cs-frontier',
+        title: 'Latest Developments in Quantum Computing',
+        author: 'Dr. Alice Wang',
+        date: '2025-01-15',
+        replies: 8,
+        views: 245,
+        posts: [
+          {
+            author: 'Dr. Alice Wang',
+            date: '2025-01-15 10:30',
+            content: 'What are your thoughts on the recent Google quantum breakthrough? This could revolutionize cryptography...'
+          }
+        ]
+      },
+      {
+        id: 2,
+        category: 'ai-ethics',
+        title: 'Ethical Considerations in Large Language Models',
+        author: 'Prof. John Smith',
+        date: '2025-01-14',
+        replies: 12,
+        views: 356,
+        posts: [
+          {
+            author: 'Prof. John Smith',
+            date: '2025-01-14 14:20',
+            content: 'As LLMs become more powerful, we must address bias, privacy, and accountability issues. Open discussion welcome.'
+          }
+        ]
+      },
+      {
+        id: 3,
+        category: 'job-seeking',
+        title: 'PhD Opportunities in Machine Learning',
+        author: 'HR Department',
+        date: '2025-01-12',
+        replies: 5,
+        views: 189,
+        posts: [
+          {
+            author: 'HR Department',
+            date: '2025-01-12 09:00',
+            content: 'We are recruiting PhD students for ML research. Applications open until March 31, 2025.'
+          }
+        ]
+      },
+      {
+        id: 4,
+        category: 'research',
+        title: 'Federated Learning Collaboration',
+        author: 'Dr. Bob Johnson',
+        date: '2025-01-10',
+        replies: 6,
+        views: 167,
+        posts: [
+          {
+            author: 'Dr. Bob Johnson',
+            date: '2025-01-10 11:45',
+            content: 'Looking for collaborators on federated learning projects. Anyone interested in joint research?'
+          }
+        ]
+      }
+    ];
+
+    let currentCategory = 'cs-frontier';
+    let currentThreadId = null;
+
+    // Render categories
+    function renderCategories() {
+      const list = document.getElementById('categoryList');
+      list.innerHTML = '';
+      
+      categories.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = `category-btn ${cat.id === currentCategory ? 'active' : ''}`;
+        btn.textContent = cat.name;
+        btn.onclick = () => {
+          currentCategory = cat.id;
+          document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          renderThreads();
+        };
+        list.appendChild(btn);
+      });
+    }
+
+    // Render threads
+    function renderThreads() {
+      const list = document.getElementById('threadsList');
+      const title = document.getElementById('forumTitle');
+      
+      const category = categories.find(c => c.id === currentCategory);
+      title.textContent = category.name;
+      
+      const filtered = threadsData.filter(t => t.category === currentCategory);
+      list.innerHTML = '';
+      
+      filtered.forEach(thread => {
+        const item = document.createElement('div');
+        item.className = 'thread-item';
+        item.onclick = () => openThreadDetail(thread.id);
+        
+        item.innerHTML = `
+          <div class="thread-info">
+            <div class="thread-title">${thread.title}</div>
+            <div class="thread-meta">
+              <span>👤 ${thread.author}</span>
+              <span>📅 ${thread.date}</span>
+            </div>
+          </div>
+          <div class="thread-stats">
+            <div class="stat"><span class="stat-number">${thread.replies}</span> replies</div>
+            <div class="stat"><span class="stat-number">${thread.views}</span> views</div>
+          </div>
+        `;
+        
+        list.appendChild(item);
+      });
+    }
+
+    // Thread detail modal (simplified)
+    function openThreadDetail(threadId) {
+      const thread = threadsData.find(t => t.id === threadId);
+      currentThreadId = threadId;
+      
+      const detail = `
+        <div style="margin-bottom: 20px; padding: 15px; background: var(--light); border-radius: 6px;">
+          <h3 style="margin-bottom: 10px;">${thread.title}</h3>
+          <p style="color: #999; margin-bottom: 10px;">👤 ${thread.author} • ${thread.date}</p>
+          <p>${thread.posts[0].content}</p>
+        </div>
+      `;
+      
+      document.getElementById('originalPost').innerHTML = detail;
+      document.getElementById('replyModal').style.display = 'block';
+    }
+
+    // Create thread
+    function createThread(event) {
+      event.preventDefault();
+      
+      const category = document.getElementById('threadCategory').value;
+      const title = document.getElementById('threadTitle').value;
+      const content = document.getElementById('threadContent').value;
+      const author = document.getElementById('threadAuthor').value;
+      
+      const newThread = {
+        id: threadsData.length + 1,
+        category,
+        title,
+        author,
+        date: new Date().toISOString().split('T')[0],
+        replies: 0,
+        views: 0,
+        posts: [{
+          author,
+          date: new Date().toLocaleString(),
+          content
+        }]
+      };
+      
+      threadsData.unshift(newThread);
+      localStorage.setItem('threadsData', JSON.stringify(threadsData));
+      
+      event.target.reset();
+      closeNewThreadModal();
+      renderThreads();
+      alert('✅ Thread created successfully!');
+    }
+
+    // Create reply
+    function createReply(event) {
+      event.preventDefault();
+      
+      const thread = threadsData.find(t => t.id === currentThreadId);
+      const content = document.getElementById('replyContent').value;
+      const author = document.getElementById('replyAuthor').value;
+      
+      thread.posts.push({
+        author,
+        date: new Date().toLocaleString(),
+        content
+      });
+      
+      thread.replies += 1;
+      localStorage.setItem('threadsData', JSON.stringify(threadsData));
+      
+      event.target.reset();
+      closeReplyModal();
+      alert('✅ Reply posted successfully!');
+    }
+
+    // Modal functions
+    function openNewThreadModal() {
+      document.getElementById('newThreadModal').style.display = 'block';
+    }
+    
+    function closeNewThreadModal() {
+      document.getElementById('newThreadModal').style.display = 'none';
+    }
+    
+    function closeReplyModal() {
+      document.getElementById('replyModal').style.display = 'none';
+    }
+
+    // Admin
+    function openAdminModal() {
+      const password = prompt('🔐 Enter admin password:');
+      if (password === 'Philo518sophy') {
+        localStorage.setItem('adminMode', 'true');
+        alert('✅ Admin mode activated!');
+      } else if (password) {
+        alert('❌ Invalid password');
+      }
+    }
+
+    // Load from localStorage
+    const stored = localStorage.getItem('threadsData');
+    if (stored) {
+      threadsData = JSON.parse(stored);
+    }
+
+    // Close modals on outside click
+    window.onclick = function(event) {
+      const newThreadModal = document.getElementById('newThreadModal');
+      const replyModal = document.getElementById('replyModal');
+      
+      if (event.target === newThreadModal) newThreadModal.style.display = 'none';
+      if (event.target === replyModal) replyModal.style.display = 'none';
+    }
+
+    // Initialize
+    renderCategories();
+    renderThreads();
+  </script>
+</body>
+</html>

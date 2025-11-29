@@ -1,0 +1,914 @@
+---
+layout: default
+title: Admin
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - Zhang Jun</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --primary: #2c3e50;
+      --secondary: #3498db;
+      --accent: #e74c3c;
+      --success: #27ae60;
+      --warning: #f39c12;
+      --light: #ecf0f1;
+      --text: #2c3e50;
+      --border: #bdc3c7;
+      --shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+      background: #f8f9fa;
+    }
+    
+    .admin-container {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: 100vh;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      background: var(--primary);
+      color: white;
+      padding: 20px;
+      position: fixed;
+      width: 250px;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    
+    .sidebar-title {
+      font-size: 1.3rem;
+      margin-bottom: 30px;
+      font-weight: 700;
+    }
+    
+    .sidebar-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .menu-item {
+      padding: 12px 15px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+      border-left: 3px solid transparent;
+    }
+    
+    .menu-item:hover {
+      background: rgba(255,255,255,0.2);
+    }
+    
+    .menu-item.active {
+      background: var(--secondary);
+      border-left-color: white;
+    }
+    
+    /* Main Content */
+    .main-content {
+      margin-left: 250px;
+      padding: 30px;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--secondary);
+    }
+    
+    .header h1 {
+      font-size: 2rem;
+    }
+    
+    .logout-btn {
+      padding: 10px 20px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    
+    .logout-btn:hover {
+      background: #c0392b;
+    }
+    
+    .section {
+      background: white;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 25px;
+      margin-bottom: 20px;
+      display: none;
+    }
+    
+    .section.active {
+      display: block;
+    }
+    
+    .section-title {
+      font-size: 1.5rem;
+      color: var(--primary);
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--secondary);
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: inherit;
+    }
+    
+    .form-group textarea {
+      min-height: 100px;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background: var(--secondary);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.3s;
+    }
+    
+    .btn:hover {
+      background: #2980b9;
+    }
+    
+    .btn-danger {
+      background: var(--accent);
+    }
+    
+    .btn-danger:hover {
+      background: #c0392b;
+    }
+    
+    .btn-success {
+      background: var(--success);
+    }
+    
+    .btn-success:hover {
+      background: #229954;
+    }
+    
+    /* Table */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    
+    .data-table th {
+      background: var(--light);
+      padding: 12px;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 2px solid var(--border);
+    }
+    
+    .data-table td {
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .data-table tr:hover {
+      background: #fafafa;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .action-btn {
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      color: white;
+      font-weight: 500;
+    }
+    
+    .edit-btn {
+      background: var(--warning);
+    }
+    
+    .edit-btn:hover {
+      background: #d68910;
+    }
+    
+    .delete-btn {
+      background: var(--accent);
+    }
+    
+    .delete-btn:hover {
+      background: #c0392b;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      background: linear-gradient(135deg, var(--secondary), #3498db);
+      color: white;
+      padding: 25px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    
+    .stat-label {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    
+    .message {
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      display: none;
+    }
+    
+    .message.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+      display: block;
+    }
+    
+    .message.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+      display: block;
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    
+    @media (max-width: 1024px) {
+      .admin-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      .main-content {
+        margin-left: 0;
+      }
+      
+      .sidebar-menu {
+        flex-direction: row;
+        gap: 5px;
+      }
+      
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-title">🔐 Admin Panel</div>
+      <div class="sidebar-menu">
+        <div class="menu-item active" onclick="showSection('dashboard')">📊 Dashboard</div>
+        <div class="menu-item" onclick="showSection('papers')">📄 Papers</div>
+        <div class="menu-item" onclick="showSection('courses')">📚 Courses</div>
+        <div class="menu-item" onclick="showSection('forum')">💬 Forum</div>
+        <div class="menu-item" onclick="showSection('lab')">🔬 Lab</div>
+        <div class="menu-item" onclick="showSection('company')">🏢 Company</div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="header">
+        <h1>Admin Dashboard</h1>
+        <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+      </div>
+
+      <div id="message" class="message"></div>
+
+      <!-- Dashboard -->
+      <div id="dashboard" class="section active">
+        <h2 class="section-title">📊 Dashboard Overview</h2>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number" id="paperCount">0</div>
+            <div class="stat-label">Total Papers</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="courseCount">0</div>
+            <div class="stat-label">Total Courses</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="threadCount">0</div>
+            <div class="stat-label">Forum Threads</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="projectCount">0</div>
+            <div class="stat-label">Lab Projects</div>
+          </div>
+        </div>
+        
+        <div style="background: var(--light); padding: 20px; border-radius: 8px; margin-top: 20px;">
+          <h3 style="margin-bottom: 10px;">⚙️ System Tools</h3>
+          <button class="btn btn-success" onclick="refreshAllData()">🔄 Refresh All Data</button>
+          <button class="btn btn-danger" onclick="clearAllData()" style="margin-left: 10px;">🗑️ Clear All Data</button>
+          <button class="btn" onclick="exportData()" style="margin-left: 10px;">📥 Export Data</button>
+        </div>
+      </div>
+
+      <!-- Papers -->
+      <div id="papers" class="section">
+        <h2 class="section-title">📄 Manage Papers</h2>
+        
+        <h3 style="margin-top: 25px; margin-bottom: 15px;">➕ Add New Paper</h3>
+        <form onsubmit="addPaper(event)" style="background: var(--light); padding: 20px; border-radius: 8px;">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Paper Title:</label>
+              <input type="text" id="paperTitle" placeholder="Title" required>
+            </div>
+            <div class="form-group">
+              <label>Year:</label>
+              <input type="number" id="paperYear" placeholder="2025" min="2000" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Authors:</label>
+              <input type="text" id="paperAuthors" placeholder="Author 1, Author 2" required>
+            </div>
+            <div class="form-group">
+              <label>Venue:</label>
+              <input type="text" id="paperVenue" placeholder="ICLR, NeurIPS, etc." required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Abstract:</label>
+            <textarea id="paperAbstract" placeholder="Paper abstract..." required></textarea>
+          </div>
+          <div class="form-group">
+            <label>Keywords:</label>
+            <input type="text" id="paperKeywords" placeholder="keyword1, keyword2, keyword3" required>
+          </div>
+          <button type="submit" class="btn">➕ Add Paper</button>
+        </form>
+
+        <h3 style="margin-top: 25px; margin-bottom: 15px;">📊 All Papers</h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Year</th>
+              <th>Venue</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="papersTable"></tbody>
+        </table>
+      </div>
+
+      <!-- Courses -->
+      <div id="courses" class="section">
+        <h2 class="section-title">📚 Manage Courses</h2>
+        
+        <h3 style="margin-top: 25px; margin-bottom: 15px;">➕ Add New Course</h3>
+        <form onsubmit="addCourse(event)" style="background: var(--light); padding: 20px; border-radius: 8px;">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Course Code:</label>
+              <input type="text" id="courseCode" placeholder="CS10001" required>
+            </div>
+            <div class="form-group">
+              <label>Course Title:</label>
+              <input type="text" id="courseTitle" placeholder="Title" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Description:</label>
+            <textarea id="courseDescription" placeholder="Course description..." required></textarea>
+          </div>
+          <button type="submit" class="btn">➕ Add Course</button>
+        </form>
+
+        <h3 style="margin-top: 25px; margin-bottom: 15px;">📊 All Courses</h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Title</th>
+              <th>Semester</th>
+              <th>Files</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="coursesTable"></tbody>
+        </table>
+      </div>
+
+      <!-- Forum -->
+      <div id="forum" class="section">
+        <h2 class="section-title">💬 Manage Forum</h2>
+        
+        <h3 style="margin-top: 25px; margin-bottom: 15px;">➕ Create New Thread</h3>
+        <form onsubmit="addThread(event)" style="background: var(--light); padding: 20px; border-radius: 8px;">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Category:</label>
+              <select id="threadCategory" required>
+                <option value="cs-frontier">Computer Science Frontier</option>
+                <option value="ai-ethics">AI Ethics Discussion</option>
+                <option value="job-seeking">Job Seeking</option>
+                <option value="research">Research Collaboration</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Thread Title:</label>
+              <input type="text" id="threadTitle" placeholder="Title" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Content:</label>
+            <textarea id="threadContent" placeholder="Thread content..." required></textarea>
+          </div>
+          <button type="submit" class="btn">➕ Create Thread</button>
+        </form>
+
+        <h3 style="margin-top: 25px; margin-bottom: 15px;">📊 Recent Threads</h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Replies</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="forumTable"></tbody>
+        </table>
+      </div>
+
+      <!-- Lab -->
+      <div id="lab" class="section">
+        <h2 class="section-title">🔬 Manage Lab</h2>
+        
+        <h3 style="margin-top: 25px; margin-bottom: 15px;">➕ Add Research Project</h3>
+        <form onsubmit="addProject(event)" style="background: var(--light); padding: 20px; border-radius: 8px;">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Project Title:</label>
+              <input type="text" id="projectTitle" placeholder="Title" required>
+            </div>
+            <div class="form-group">
+              <label>Status:</label>
+              <select id="projectStatus">
+                <option value="active">Active</option>
+                <option value="completed">Completed</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Description:</label>
+            <textarea id="projectDescription" placeholder="Project description..." required></textarea>
+          </div>
+          <button type="submit" class="btn">➕ Add Project</button>
+        </form>
+
+        <h3 style="margin-top: 25px; margin-bottom: 15px;">📊 All Projects</h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="projectsTable"></tbody>
+        </table>
+      </div>
+
+      <!-- Company -->
+      <div id="company" class="section">
+        <h2 class="section-title">🏢 Manage Company</h2>
+        
+        <h3 style="margin-top: 25px; margin-bottom: 15px;">➕ Add Initiative</h3>
+        <form onsubmit="addInitiative(event)" style="background: var(--light); padding: 20px; border-radius: 8px;">
+          <div class="form-group">
+            <label>Initiative Title:</label>
+            <input type="text" id="initiativeTitle" placeholder="Title" required>
+          </div>
+          <div class="form-group">
+            <label>Description:</label>
+            <textarea id="initiativeDescription" placeholder="Description..." required></textarea>
+          </div>
+          <button type="submit" class="btn">➕ Add Initiative</button>
+        </form>
+
+        <h3 style="margin-top: 25px; margin-bottom: 15px;">📊 All Initiatives</h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="initiativesTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Check authentication
+    if (localStorage.getItem('adminMode') !== 'true') {
+      const password = prompt('🔐 Enter admin password to access the admin panel:');
+      if (password === 'Philo518sophy') {
+        localStorage.setItem('adminMode', 'true');
+      } else {
+        alert('❌ Invalid password');
+        window.location.href = '/';
+      }
+    }
+
+    // Load all data
+    let papersData = JSON.parse(localStorage.getItem('papersData') || '[]');
+    let coursesData = JSON.parse(localStorage.getItem('coursesData') || '[]');
+    let threadsData = JSON.parse(localStorage.getItem('threadsData') || '[]');
+    let projectsData = JSON.parse(localStorage.getItem('labProjects') || '[]');
+    let initiativesData = JSON.parse(localStorage.getItem('companyInitiatives') || '[]');
+
+    // Show section
+    function showSection(sectionId) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(sectionId).classList.add('active');
+      document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+      event.target.classList.add('active');
+      updateDashboard();
+    }
+
+    // Update dashboard
+    function updateDashboard() {
+      document.getElementById('paperCount').textContent = papersData.length;
+      document.getElementById('courseCount').textContent = coursesData.length;
+      document.getElementById('threadCount').textContent = threadsData.length;
+      document.getElementById('projectCount').textContent = projectsData.length;
+    }
+
+    // Add paper
+    function addPaper(event) {
+      event.preventDefault();
+      papersData.push({
+        id: papersData.length + 1,
+        title: document.getElementById('paperTitle').value,
+        authors: document.getElementById('paperAuthors').value,
+        year: document.getElementById('paperYear').value,
+        venue: document.getElementById('paperVenue').value,
+        abstract: document.getElementById('paperAbstract').value,
+        keywords: document.getElementById('paperKeywords').value.split(',').map(k => k.trim()),
+        tags: []
+      });
+      localStorage.setItem('papersData', JSON.stringify(papersData));
+      showMessage('✅ Paper added successfully!', 'success');
+      event.target.reset();
+      updatePapersTable();
+    }
+
+    // Add course
+    function addCourse(event) {
+      event.preventDefault();
+      coursesData.push({
+        id: coursesData.length + 1,
+        code: document.getElementById('courseCode').value,
+        title: document.getElementById('courseTitle').value,
+        semester: 'Spring 2025',
+        units: 3,
+        instructor: 'Zhang Jun',
+        description: document.getElementById('courseDescription').value,
+        syllabus: '<li>Introduction to fundamentals</li><li>Core concepts</li><li>Advanced topics</li>',
+        files: []
+      });
+      localStorage.setItem('coursesData', JSON.stringify(coursesData));
+      showMessage('✅ Course added successfully!', 'success');
+      event.target.reset();
+      updateCoursesTable();
+    }
+
+    // Add thread
+    function addThread(event) {
+      event.preventDefault();
+      threadsData.push({
+        id: threadsData.length + 1,
+        category: document.getElementById('threadCategory').value,
+        title: document.getElementById('threadTitle').value,
+        author: 'Admin',
+        date: new Date().toISOString().split('T')[0],
+        replies: 0,
+        views: 0,
+        posts: [{
+          author: 'Admin',
+          date: new Date().toLocaleString(),
+          content: document.getElementById('threadContent').value
+        }]
+      });
+      localStorage.setItem('threadsData', JSON.stringify(threadsData));
+      showMessage('✅ Thread created successfully!', 'success');
+      event.target.reset();
+      updateForumTable();
+    }
+
+    // Add project
+    function addProject(event) {
+      event.preventDefault();
+      projectsData.push({
+        id: projectsData.length + 1,
+        title: document.getElementById('projectTitle').value,
+        status: document.getElementById('projectStatus').value,
+        description: document.getElementById('projectDescription').value
+      });
+      localStorage.setItem('labProjects', JSON.stringify(projectsData));
+      showMessage('✅ Project added successfully!', 'success');
+      event.target.reset();
+      updateProjectsTable();
+    }
+
+    // Add initiative
+    function addInitiative(event) {
+      event.preventDefault();
+      initiativesData.push({
+        id: initiativesData.length + 1,
+        icon: '🎯',
+        title: document.getElementById('initiativeTitle').value,
+        description: document.getElementById('initiativeDescription').value
+      });
+      localStorage.setItem('companyInitiatives', JSON.stringify(initiativesData));
+      showMessage('✅ Initiative added successfully!', 'success');
+      event.target.reset();
+      updateInitiativesTable();
+    }
+
+    // Update tables
+    function updatePapersTable() {
+      const tbody = document.getElementById('papersTable');
+      tbody.innerHTML = papersData.map(p => `
+        <tr>
+          <td>${p.title}</td>
+          <td>${p.year}</td>
+          <td>${p.venue}</td>
+          <td>
+            <div class="action-buttons">
+              <button class="action-btn delete-btn" onclick="deletePaper(${p.id})">Delete</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function updateCoursesTable() {
+      const tbody = document.getElementById('coursesTable');
+      tbody.innerHTML = coursesData.map(c => `
+        <tr>
+          <td>${c.code}</td>
+          <td>${c.title}</td>
+          <td>${c.semester}</td>
+          <td>${c.files.length}</td>
+          <td>
+            <div class="action-buttons">
+              <button class="action-btn delete-btn" onclick="deleteCourse(${c.id})">Delete</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function updateForumTable() {
+      const tbody = document.getElementById('forumTable');
+      tbody.innerHTML = threadsData.slice(0, 10).map(t => `
+        <tr>
+          <td>${t.title}</td>
+          <td>${t.category}</td>
+          <td>${t.replies}</td>
+          <td>
+            <div class="action-buttons">
+              <button class="action-btn delete-btn" onclick="deleteThread(${t.id})">Delete</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function updateProjectsTable() {
+      const tbody = document.getElementById('projectsTable');
+      tbody.innerHTML = projectsData.map(p => `
+        <tr>
+          <td>${p.title}</td>
+          <td>${p.status}</td>
+          <td>
+            <div class="action-buttons">
+              <button class="action-btn delete-btn" onclick="deleteProject(${p.id})">Delete</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function updateInitiativesTable() {
+      const tbody = document.getElementById('initiativesTable');
+      tbody.innerHTML = initiativesData.map(i => `
+        <tr>
+          <td>${i.title}</td>
+          <td>
+            <div class="action-buttons">
+              <button class="action-btn delete-btn" onclick="deleteInitiative(${i.id})">Delete</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Delete functions
+    function deletePaper(id) {
+      if (confirm('Are you sure?')) {
+        papersData = papersData.filter(p => p.id !== id);
+        localStorage.setItem('papersData', JSON.stringify(papersData));
+        updatePapersTable();
+        showMessage('✅ Paper deleted', 'success');
+      }
+    }
+
+    function deleteCourse(id) {
+      if (confirm('Are you sure?')) {
+        coursesData = coursesData.filter(c => c.id !== id);
+        localStorage.setItem('coursesData', JSON.stringify(coursesData));
+        updateCoursesTable();
+        showMessage('✅ Course deleted', 'success');
+      }
+    }
+
+    function deleteThread(id) {
+      if (confirm('Are you sure?')) {
+        threadsData = threadsData.filter(t => t.id !== id);
+        localStorage.setItem('threadsData', JSON.stringify(threadsData));
+        updateForumTable();
+        showMessage('✅ Thread deleted', 'success');
+      }
+    }
+
+    function deleteProject(id) {
+      if (confirm('Are you sure?')) {
+        projectsData = projectsData.filter(p => p.id !== id);
+        localStorage.setItem('labProjects', JSON.stringify(projectsData));
+        updateProjectsTable();
+        showMessage('✅ Project deleted', 'success');
+      }
+    }
+
+    function deleteInitiative(id) {
+      if (confirm('Are you sure?')) {
+        initiativesData = initiativesData.filter(i => i.id !== id);
+        localStorage.setItem('companyInitiatives', JSON.stringify(initiativesData));
+        updateInitiativesTable();
+        showMessage('✅ Initiative deleted', 'success');
+      }
+    }
+
+    // Utility functions
+    function showMessage(msg, type) {
+      const messageEl = document.getElementById('message');
+      messageEl.className = `message ${type}`;
+      messageEl.textContent = msg;
+      setTimeout(() => messageEl.className = 'message', 3000);
+    }
+
+    function refreshAllData() {
+      papersData = JSON.parse(localStorage.getItem('papersData') || '[]');
+      coursesData = JSON.parse(localStorage.getItem('coursesData') || '[]');
+      threadsData = JSON.parse(localStorage.getItem('threadsData') || '[]');
+      projectsData = JSON.parse(localStorage.getItem('labProjects') || '[]');
+      initiativesData = JSON.parse(localStorage.getItem('companyInitiatives') || '[]');
+      updateDashboard();
+      updatePapersTable();
+      updateCoursesTable();
+      updateForumTable();
+      updateProjectsTable();
+      updateInitiativesTable();
+      showMessage('✅ All data refreshed', 'success');
+    }
+
+    function clearAllData() {
+      if (confirm('Are you sure? This will delete all data!')) {
+        localStorage.removeItem('papersData');
+        localStorage.removeItem('coursesData');
+        localStorage.removeItem('threadsData');
+        localStorage.removeItem('labProjects');
+        localStorage.removeItem('companyInitiatives');
+        papersData = [];
+        coursesData = [];
+        threadsData = [];
+        projectsData = [];
+        initiativesData = [];
+        refreshAllData();
+        showMessage('✅ All data cleared', 'success');
+      }
+    }
+
+    function exportData() {
+      const data = {
+        papers: papersData,
+        courses: coursesData,
+        threads: threadsData,
+        projects: projectsData,
+        initiatives: initiativesData
+      };
+      const json = JSON.stringify(data, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'admin_backup_' + new Date().toISOString().split('T')[0] + '.json';
+      a.click();
+      showMessage('✅ Data exported', 'success');
+    }
+
+    function logout() {
+      if (confirm('Logout?')) {
+        localStorage.removeItem('adminMode');
+        window.location.href = '/';
+      }
+    }
+
+    // Initialize
+    updateDashboard();
+    updatePapersTable();
+    updateCoursesTable();
+    updateForumTable();
+    updateProjectsTable();
+    updateInitiativesTable();
+  </script>
+</body>
+</html>

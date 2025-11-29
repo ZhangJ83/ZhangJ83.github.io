@@ -1,0 +1,715 @@
+---
+layout: default
+title: Company
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Company - Zhang Jun</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --primary: #2c3e50;
+      --secondary: #3498db;
+      --accent: #e74c3c;
+      --light: #ecf0f1;
+      --text: #2c3e50;
+      --border: #bdc3c7;
+      --shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+      background: #f8f9fa;
+    }
+    
+    nav.main-nav {
+      background: white;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+    }
+    
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+      list-style: none;
+    }
+    
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    
+    .nav-links a:hover {
+      color: var(--secondary);
+    }
+    
+    .nav-links .btn-admin {
+      padding: 8px 16px;
+      background: var(--accent);
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      border: none;
+      font-weight: 500;
+    }
+    
+    .hero {
+      background: linear-gradient(135deg, #e74c3c, #c0392b);
+      color: white;
+      padding: 60px 20px;
+      text-align: center;
+    }
+    
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .section {
+      margin-bottom: 50px;
+    }
+    
+    .section-title {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 30px;
+      border-bottom: 3px solid var(--secondary);
+      padding-bottom: 10px;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background: var(--secondary);
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.3s;
+      cursor: pointer;
+      border: none;
+      font-weight: 500;
+    }
+    
+    .btn:hover {
+      background: #2980b9;
+    }
+    
+    /* Overview */
+    .overview-content {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+    
+    .overview-text h3 {
+      color: var(--secondary);
+      margin-bottom: 15px;
+      font-size: 1.3rem;
+    }
+    
+    .overview-text p {
+      margin-bottom: 15px;
+      line-height: 1.8;
+      color: #555;
+    }
+    
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    
+    .stat-box {
+      background: linear-gradient(135deg, var(--secondary), #3498db);
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    
+    .stat-label {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    
+    /* Initiatives */
+    .initiatives-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    
+    .initiative-card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 25px;
+      border-top: 4px solid var(--secondary);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .initiative-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    
+    .initiative-icon {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+    }
+    
+    .initiative-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+    
+    .initiative-description {
+      color: #666;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    
+    /* Team */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    
+    .team-member {
+      background: white;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.3s;
+    }
+    
+    .team-member:hover {
+      transform: translateY(-3px);
+    }
+    
+    .member-avatar {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--secondary), #9b59b6);
+      margin: 0 auto 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+    }
+    
+    .member-name {
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+    
+    .member-title {
+      color: var(--secondary);
+      font-size: 0.85rem;
+      margin-bottom: 10px;
+    }
+    
+    /* Resources */
+    .resources-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    
+    .resource-item {
+      background: white;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 20px;
+      border-left: 4px solid var(--secondary);
+    }
+    
+    .resource-title {
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+    
+    .resource-description {
+      color: #666;
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+    }
+    
+    .resource-link {
+      color: var(--secondary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    .resource-link:hover {
+      text-decoration: underline;
+    }
+    
+    /* CTA */
+    .cta-section {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 40px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    
+    .cta-section h3 {
+      margin-bottom: 15px;
+      font-size: 1.5rem;
+    }
+    
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .cta-btn {
+      padding: 12px 24px;
+      background: white;
+      color: var(--primary);
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+    
+    .cta-btn:hover {
+      background: var(--light);
+    }
+    
+    footer {
+      background: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+    }
+    
+    .modal-content {
+      background: white;
+      margin: 20px auto;
+      padding: 30px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: var(--shadow);
+    }
+    
+    .close {
+      cursor: pointer;
+      color: #aaa;
+      font-size: 28px;
+      font-weight: bold;
+      float: right;
+    }
+    
+    .close:hover {
+      color: black;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: inherit;
+    }
+    
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 1.8rem;
+      }
+      
+      .overview-content {
+        grid-template-columns: 1fr;
+      }
+      
+      .initiatives-grid,
+      .team-grid,
+      .resources-list {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="main-nav">
+    <div class="nav-container">
+      <a href="/" class="logo">🎓 Zhang Jun</a>
+      <ul class="nav-links">
+        <li><a href="/papers.html">📄 Papers</a></li>
+        <li><a href="/courses.html">📚 Courses</a></li>
+        <li><a href="/forum.html">💬 Forum</a></li>
+        <li><a href="/lab.html">🔬 Lab</a></li>
+        <li><a href="/company.html">🏢 Company</a></li>
+        <li><button class="btn-admin" onclick="openAdminModal()">🔐 Admin</button></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <div class="hero">
+    <h1>🏢 AI Research Association</h1>
+    <p>Advancing AI Innovation Through Collaboration</p>
+  </div>
+
+  <div class="container">
+    <!-- Overview -->
+    <div class="section">
+      <h2 class="section-title">🎯 About AIRA</h2>
+      <div class="overview-content">
+        <div class="overview-text">
+          <h3>Mission & Vision</h3>
+          <p>
+            The AI Research Association (AIRA) is a leading consortium of academic institutions, 
+            tech companies, and research organizations dedicated to advancing artificial intelligence 
+            research and fostering responsible AI development.
+          </p>
+          <p>
+            We believe AI has tremendous potential to solve humanity's most pressing challenges. 
+            Through collaboration and knowledge sharing, we're building a future where AI benefits 
+            everyone.
+          </p>
+        </div>
+        <div class="stats">
+          <div class="stat-box">
+            <div class="stat-number">150+</div>
+            <div class="stat-label">Member Organizations</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number">2.5K+</div>
+            <div class="stat-label">Active Researchers</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number">500+</div>
+            <div class="stat-label">Publications/Year</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number">$50M+</div>
+            <div class="stat-label">Annual Funding</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Initiatives -->
+    <div class="section">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2 class="section-title">🚀 Current Initiatives</h2>
+        <button class="btn" onclick="openInitiativeModal()" id="addInitiativeBtn" style="display: none;">+ Add Initiative</button>
+      </div>
+      
+      <div class="initiatives-grid" id="initiativesList"></div>
+    </div>
+
+    <!-- Leadership Team -->
+    <div class="section">
+      <h2 class="section-title">👔 Leadership Team</h2>
+      <div class="team-grid" id="teamList"></div>
+    </div>
+
+    <!-- Resources -->
+    <div class="section">
+      <h2 class="section-title">📚 Resources & Tools</h2>
+      <div class="resources-list" id="resourcesList"></div>
+    </div>
+
+    <!-- Join Us -->
+    <div class="section">
+      <div class="cta-section">
+        <h3>Ready to Join AIRA?</h3>
+        <p>Become part of the global community advancing AI research and innovation</p>
+        <div class="cta-buttons">
+          <a href="#" class="cta-btn">🔗 Join Us</a>
+          <a href="#" class="cta-btn">📧 Contact Us</a>
+          <a href="#" class="cta-btn">🌐 Learn More</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Initiative Modal -->
+  <div id="initiativeModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeInitiativeModal()">&times;</span>
+      <h3>Add Initiative</h3>
+      <form onsubmit="addInitiative(event)" style="margin-top: 20px;">
+        <div class="form-group">
+          <label>Initiative Title:</label>
+          <input type="text" id="initiativeTitle" placeholder="Title" required>
+        </div>
+        <div class="form-group">
+          <label>Description:</label>
+          <textarea id="initiativeDescription" placeholder="Description" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn" style="width: 100%; margin-top: 15px;">Add Initiative</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 AI Research Association. All rights reserved.</p>
+  </footer>
+
+  <script>
+    let initiativesData = [
+      {
+        id: 1,
+        icon: '🤖',
+        title: 'Trustworthy AI',
+        description: 'Developing frameworks and standards for safe, transparent, and accountable AI systems.'
+      },
+      {
+        id: 2,
+        icon: '🌍',
+        title: 'Global AI Impact',
+        description: 'Collaborative projects addressing climate change, healthcare, and education using AI.'
+      },
+      {
+        id: 3,
+        icon: '📚',
+        title: 'AI Education',
+        description: 'Providing free courses, workshops, and certification programs for the next generation of AI researchers.'
+      },
+      {
+        id: 4,
+        icon: '🔬',
+        title: 'Open Science',
+        description: 'Promoting open-source AI models, datasets, and tools for the research community.'
+      }
+    ];
+
+    let teamData = [
+      { name: 'Dr. Sarah Johnson', title: 'Executive Director', avatar: '👩‍💼' },
+      { name: 'Prof. Michael Chen', title: 'Research Director', avatar: '👨‍🔬' },
+      { name: 'Emma Williams', title: 'Operations Lead', avatar: '👩‍💻' },
+      { name: 'Dr. James Park', title: 'Policy Director', avatar: '👨‍⚖️' },
+      { name: 'Lisa Anderson', title: 'Community Manager', avatar: '👩‍🤝‍👨' },
+      { name: 'Dr. Robert Zhang', title: 'Education Coordinator', avatar: '👨‍🏫' }
+    ];
+
+    let resourcesData = [
+      {
+        title: 'AI Benchmark Suite',
+        description: 'Comprehensive benchmarking tools for evaluating AI models across multiple domains.',
+        link: 'https://benchmark.aira.org'
+      },
+      {
+        title: 'Research Paper Database',
+        description: 'Curated repository of over 100,000 AI research papers with advanced search capabilities.',
+        link: 'https://papers.aira.org'
+      },
+      {
+        title: 'Model Zoo',
+        description: 'Pre-trained models and code implementations from leading research groups.',
+        link: 'https://models.aira.org'
+      },
+      {
+        title: 'Ethics Guidelines',
+        description: 'Best practices and guidelines for responsible AI development and deployment.',
+        link: 'https://ethics.aira.org'
+      }
+    ];
+
+    function renderInitiatives() {
+      const list = document.getElementById('initiativesList');
+      list.innerHTML = '';
+      
+      initiativesData.forEach(initiative => {
+        const card = document.createElement('div');
+        card.className = 'initiative-card';
+        card.innerHTML = `
+          <div class="initiative-icon">${initiative.icon}</div>
+          <div class="initiative-title">${initiative.title}</div>
+          <div class="initiative-description">${initiative.description}</div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function renderTeam() {
+      const list = document.getElementById('teamList');
+      list.innerHTML = '';
+      
+      teamData.forEach(member => {
+        const card = document.createElement('div');
+        card.className = 'team-member';
+        card.innerHTML = `
+          <div class="member-avatar">${member.avatar}</div>
+          <div class="member-name">${member.name}</div>
+          <div class="member-title">${member.title}</div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function renderResources() {
+      const list = document.getElementById('resourcesList');
+      list.innerHTML = '';
+      
+      resourcesData.forEach(resource => {
+        const item = document.createElement('div');
+        item.className = 'resource-item';
+        item.innerHTML = `
+          <div class="resource-title">${resource.title}</div>
+          <div class="resource-description">${resource.description}</div>
+          <a href="${resource.link}" class="resource-link" target="_blank">Visit →</a>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    function openInitiativeModal() {
+      document.getElementById('initiativeModal').style.display = 'block';
+    }
+
+    function closeInitiativeModal() {
+      document.getElementById('initiativeModal').style.display = 'none';
+      document.getElementById('initiativeTitle').value = '';
+      document.getElementById('initiativeDescription').value = '';
+    }
+
+    function addInitiative(event) {
+      event.preventDefault();
+      
+      const title = document.getElementById('initiativeTitle').value;
+      const description = document.getElementById('initiativeDescription').value;
+      
+      initiativesData.push({
+        id: initiativesData.length + 1,
+        icon: '🎯',
+        title,
+        description
+      });
+      
+      localStorage.setItem('companyInitiatives', JSON.stringify(initiativesData));
+      alert('✅ Initiative added successfully!');
+      closeInitiativeModal();
+      renderInitiatives();
+    }
+
+    function openAdminModal() {
+      const password = prompt('🔐 Enter admin password:');
+      if (password === 'Philo518sophy') {
+        localStorage.setItem('adminMode', 'true');
+        document.getElementById('addInitiativeBtn').style.display = 'inline-block';
+        alert('✅ Admin mode activated!');
+      } else if (password) {
+        alert('❌ Invalid password');
+      }
+    }
+
+    window.onclick = function(event) {
+      const modal = document.getElementById('initiativeModal');
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+    }
+
+    // Load data
+    const storedInitiatives = localStorage.getItem('companyInitiatives');
+    if (storedInitiatives) {
+      initiativesData = JSON.parse(storedInitiatives);
+    }
+
+    if (localStorage.getItem('adminMode') === 'true') {
+      document.getElementById('addInitiativeBtn').style.display = 'inline-block';
+    }
+
+    // Initialize
+    renderInitiatives();
+    renderTeam();
+    renderResources();
+  </script>
+</body>
+</html>

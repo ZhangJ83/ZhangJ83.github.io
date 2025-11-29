@@ -1,0 +1,683 @@
+---
+layout: default
+title: Courses
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Courses - Zhang Jun</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --primary: #2c3e50;
+      --secondary: #3498db;
+      --accent: #e74c3c;
+      --light: #ecf0f1;
+      --text: #2c3e50;
+      --border: #bdc3c7;
+      --shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+      background: #f8f9fa;
+    }
+    
+    nav.main-nav {
+      background: white;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+    }
+    
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+      list-style: none;
+    }
+    
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    
+    .nav-links a:hover {
+      color: var(--secondary);
+    }
+    
+    .nav-links .btn-admin {
+      padding: 8px 16px;
+      background: var(--accent);
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      border: none;
+      font-weight: 500;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .page-header h1 {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+    
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+    
+    .course-card {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+    
+    .course-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+    
+    .course-header {
+      background: linear-gradient(135deg, var(--secondary) 0%, #2980b9 100%);
+      padding: 20px;
+      color: white;
+    }
+    
+    .course-code {
+      font-size: 0.8rem;
+      opacity: 0.9;
+      margin-bottom: 5px;
+    }
+    
+    .course-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    
+    .course-meta {
+      font-size: 0.9rem;
+      opacity: 0.95;
+    }
+    
+    .course-content {
+      padding: 20px;
+    }
+    
+    .course-desc {
+      color: #666;
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+    
+    .course-units {
+      margin-bottom: 15px;
+      padding: 10px;
+      background: var(--light);
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background: var(--secondary);
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.3s;
+      cursor: pointer;
+      border: none;
+      font-weight: 500;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .btn:hover {
+      background: #2980b9;
+    }
+    
+    .btn-secondary {
+      background: #95a5a6;
+    }
+    
+    .btn-secondary:hover {
+      background: #7f8c8d;
+    }
+    
+    /* Course Detail Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      overflow-y: auto;
+    }
+    
+    .modal-content {
+      background-color: white;
+      margin: 20px auto;
+      padding: 30px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 800px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--secondary);
+      padding-bottom: 15px;
+    }
+    
+    .modal-title {
+      font-size: 1.8rem;
+      color: var(--primary);
+    }
+    
+    .close {
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #aaa;
+    }
+    
+    .close:hover {
+      color: black;
+    }
+    
+    .course-sections {
+      margin: 20px 0;
+    }
+    
+    .section-title {
+      font-size: 1.2rem;
+      color: var(--secondary);
+      margin: 20px 0 10px 0;
+      font-weight: 600;
+    }
+    
+    .syllabus {
+      background: var(--light);
+      padding: 15px;
+      border-radius: 6px;
+      margin: 10px 0;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    
+    .syllabus ul {
+      margin-left: 20px;
+    }
+    
+    .syllabus li {
+      margin: 8px 0;
+      line-height: 1.6;
+    }
+    
+    .file-upload {
+      margin: 20px 0;
+      padding: 20px;
+      border: 2px dashed var(--secondary);
+      border-radius: 6px;
+      background: #f0f8ff;
+    }
+    
+    .file-upload h4 {
+      margin-bottom: 10px;
+      color: var(--secondary);
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: inherit;
+    }
+    
+    .files-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    
+    .file-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      background: var(--light);
+      border-radius: 4px;
+      border-left: 4px solid var(--secondary);
+    }
+    
+    .file-info {
+      flex: 1;
+    }
+    
+    .file-name {
+      font-weight: 500;
+      color: var(--text);
+    }
+    
+    .file-size {
+      font-size: 0.8rem;
+      color: #999;
+    }
+    
+    .file-actions {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .btn-small {
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      width: auto;
+    }
+    
+    footer {
+      background: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+    
+    @media (max-width: 768px) {
+      .courses-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .modal-content {
+        width: 95%;
+        margin: 10px auto;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="main-nav">
+    <div class="nav-container">
+      <a href="/" class="logo">🎓 Zhang Jun</a>
+      <ul class="nav-links">
+        <li><a href="/papers.html">📄 Papers</a></li>
+        <li><a href="/courses.html">📚 Courses</a></li>
+        <li><a href="/forum.html">💬 Forum</a></li>
+        <li><a href="/lab.html">🔬 Lab</a></li>
+        <li><a href="/company.html">🏢 Company</a></li>
+        <li><button class="btn-admin" onclick="openAdminModal()">🔐 Admin</button></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>📚 Open Courses</h1>
+      <p>Teaching materials, lecture notes, and course resources inspired by MIT OpenCourseware</p>
+    </div>
+
+    <div class="courses-grid" id="coursesGrid"></div>
+  </div>
+
+  <!-- Course Detail Modal -->
+  <div id="courseModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <div id="modalCourseCode" style="font-size: 0.9rem; color: #999; margin-bottom: 5px;"></div>
+          <div class="modal-title" id="modalCourseTitle"></div>
+        </div>
+        <span class="close" onclick="closeCourseModal()">&times;</span>
+      </div>
+
+      <div class="course-sections">
+        <div class="section-title">📖 Course Description</div>
+        <p id="modalCourseDesc"></p>
+
+        <div class="section-title">📋 Syllabus</div>
+        <div class="syllabus" id="modalSyllabus"></div>
+
+        <div class="section-title">📂 Course Materials</div>
+        <div class="files-list" id="modalFiles"></div>
+
+        <div class="file-upload" id="adminUploadSection" style="display: none;">
+          <h4>📤 Upload Course Material (Admin)</h4>
+          <div class="form-group">
+            <input type="file" id="fileToUpload" multiple accept=".pdf,.doc,.docx,.txt,.ppt,.pptx,.zip">
+          </div>
+          <button class="btn btn-secondary" onclick="uploadFile()">Upload</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Zhang Jun. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Sample courses data
+    const coursesData = [
+      {
+        id: 1,
+        code: "CS 10001",
+        title: "Advanced Algorithms",
+        semester: "Spring 2025",
+        units: 4,
+        instructor: "Zhang, J.",
+        description: "Comprehensive study of advanced algorithmic techniques including dynamic programming, greedy algorithms, graph algorithms, and NP-completeness. Covers both theoretical foundations and practical applications.",
+        syllabus: `
+          <ul>
+            <li>Week 1-2: Algorithm Complexity Analysis and Big-O Notation</li>
+            <li>Week 3-4: Dynamic Programming</li>
+            <li>Week 5-6: Greedy Algorithms</li>
+            <li>Week 7-8: Graph Algorithms (DFS, BFS, Dijkstra)</li>
+            <li>Week 9-10: Minimum Spanning Trees</li>
+            <li>Week 11-12: NP-Completeness</li>
+            <li>Week 13-14: Approximation Algorithms</li>
+            <li>Week 15: Final Project Presentations</li>
+          </ul>
+        `,
+        files: []
+      },
+      {
+        id: 2,
+        code: "CS 10002",
+        title: "Machine Learning Foundations",
+        semester: "Fall 2024",
+        units: 3,
+        instructor: "Zhang, J.",
+        description: "Introduction to machine learning fundamentals including supervised and unsupervised learning. Topics cover linear regression, classification, clustering, neural networks, and practical applications.",
+        syllabus: `
+          <ul>
+            <li>Week 1-2: Introduction and Mathematical Foundations</li>
+            <li>Week 3-4: Linear Regression and Regularization</li>
+            <li>Week 5-6: Logistic Regression and Classification</li>
+            <li>Week 7-8: Decision Trees and Ensemble Methods</li>
+            <li>Week 9-10: Neural Networks Basics</li>
+            <li>Week 11-12: Unsupervised Learning (K-means, PCA)</li>
+            <li>Week 13-14: Deep Learning Applications</li>
+            <li>Week 15: Final Project</li>
+          </ul>
+        `,
+        files: []
+      },
+      {
+        id: 3,
+        code: "CS 10003",
+        title: "Quantum Computing Introduction",
+        semester: "Spring 2025",
+        units: 3,
+        instructor: "Zhang, J.",
+        description: "Introduction to quantum computing principles and algorithms. Covers quantum bits, quantum gates, quantum algorithms, and applications in machine learning and optimization.",
+        syllabus: `
+          <ul>
+            <li>Week 1-2: Quantum Mechanics Fundamentals</li>
+            <li>Week 3-4: Qubits and Quantum Gates</li>
+            <li>Week 5-6: Quantum Circuits</li>
+            <li>Week 7-8: Quantum Algorithms (Shor's, Grover's)</li>
+            <li>Week 9-10: Quantum Machine Learning</li>
+            <li>Week 11-12: Quantum Error Correction</li>
+            <li>Week 13-14: Applications and Future Directions</li>
+            <li>Week 15: Final Project</li>
+          </ul>
+        `,
+        files: []
+      },
+      {
+        id: 4,
+        code: "CS 10004",
+        title: "Natural Language Processing",
+        semester: "Fall 2024",
+        units: 4,
+        instructor: "Zhang, J.",
+        description: "Advanced NLP techniques including transformer models, embeddings, and language understanding. Practical experience with state-of-the-art tools and frameworks.",
+        syllabus: `
+          <ul>
+            <li>Week 1-2: NLP Fundamentals</li>
+            <li>Week 3-4: Word Embeddings and Representations</li>
+            <li>Week 5-6: Recurrent Neural Networks</li>
+            <li>Week 7-8: Attention Mechanisms</li>
+            <li>Week 9-10: Transformer Models</li>
+            <li>Week 11-12: Language Models and GPT</li>
+            <li>Week 13-14: Applications (NMT, QA, Sentiment Analysis)</li>
+            <li>Week 15: Final Project</li>
+          </ul>
+        `,
+        files: []
+      }
+    ];
+
+    let currentCourseId = null;
+
+    // Render courses grid
+    function renderCourses() {
+      const grid = document.getElementById('coursesGrid');
+      grid.innerHTML = '';
+
+      coursesData.forEach(course => {
+        const card = document.createElement('div');
+        card.className = 'course-card';
+        card.onclick = () => openCourseModal(course.id);
+        
+        card.innerHTML = `
+          <div class="course-header">
+            <div class="course-code">${course.code}</div>
+            <div class="course-title">${course.title}</div>
+            <div class="course-meta">${course.semester} • ${course.units} Units</div>
+          </div>
+          <div class="course-content">
+            <div class="course-desc">${course.description.substring(0, 120)}...</div>
+            <div class="course-units">👨‍🏫 ${course.instructor}</div>
+            <button class="btn" style="margin-top: 10px;">View Course →</button>
+          </div>
+        `;
+        
+        grid.appendChild(card);
+      });
+    }
+
+    // Open course modal
+    function openCourseModal(courseId) {
+      currentCourseId = courseId;
+      const course = coursesData.find(c => c.id === courseId);
+      
+      document.getElementById('modalCourseCode').textContent = course.code;
+      document.getElementById('modalCourseTitle').textContent = course.title;
+      document.getElementById('modalCourseDesc').textContent = course.description;
+      document.getElementById('modalSyllabus').innerHTML = course.syllabus;
+      
+      renderFilesList(course.files);
+      
+      if (localStorage.getItem('adminMode') === 'true') {
+        document.getElementById('adminUploadSection').style.display = 'block';
+      }
+      
+      document.getElementById('courseModal').style.display = 'block';
+    }
+
+    // Close modal
+    function closeCourseModal() {
+      document.getElementById('courseModal').style.display = 'none';
+    }
+
+    // Render files list
+    function renderFilesList(files) {
+      const filesList = document.getElementById('modalFiles');
+      filesList.innerHTML = '';
+      
+      if (files.length === 0) {
+        filesList.innerHTML = '<p style="color: #999;">No files uploaded yet</p>';
+        return;
+      }
+      
+      files.forEach((file, index) => {
+        const item = document.createElement('div');
+        item.className = 'file-item';
+        item.innerHTML = `
+          <div class="file-info">
+            <div class="file-name">📄 ${file.name}</div>
+            <div class="file-size">${(file.size / 1024).toFixed(2)} KB</div>
+          </div>
+          <div class="file-actions">
+            <a href="${file.url}" class="btn btn-small" download>Download</a>
+            ${localStorage.getItem('adminMode') === 'true' ? `<button class="btn btn-small btn-secondary" onclick="deleteFile(${currentCourseId}, ${index})">Delete</button>` : ''}
+          </div>
+        `;
+        filesList.appendChild(item);
+      });
+    }
+
+    // Upload file
+    function uploadFile() {
+      const input = document.getElementById('fileToUpload');
+      const files = input.files;
+      
+      if (files.length === 0) {
+        alert('Please select a file');
+        return;
+      }
+      
+      const course = coursesData.find(c => c.id === currentCourseId);
+      
+      for (let file of files) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const fileData = {
+            name: file.name,
+            size: file.size,
+            url: e.target.result,
+            uploadedAt: new Date().toLocaleString()
+          };
+          
+          course.files.push(fileData);
+          saveCourseData();
+          renderFilesList(course.files);
+          input.value = '';
+          alert(`✅ File "${file.name}" uploaded successfully!`);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // Delete file
+    function deleteFile(courseId, fileIndex) {
+      if (confirm('Delete this file?')) {
+        const course = coursesData.find(c => c.id === courseId);
+        course.files.splice(fileIndex, 1);
+        saveCourseData();
+        renderFilesList(course.files);
+        alert('✅ File deleted');
+      }
+    }
+
+    // Save to localStorage
+    function saveCourseData() {
+      localStorage.setItem('coursesData', JSON.stringify(coursesData));
+    }
+
+    // Load from localStorage
+    function loadCourseData() {
+      const stored = localStorage.getItem('coursesData');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        coursesData.forEach(course => {
+          const stored_course = parsed.find(c => c.id === course.id);
+          if (stored_course) {
+            course.files = stored_course.files || [];
+          }
+        });
+      }
+    }
+
+    // Admin modal
+    function openAdminModal() {
+      const password = prompt('🔐 Enter admin password:');
+      if (password === 'Philo518sophy') {
+        localStorage.setItem('adminMode', 'true');
+        alert('✅ Admin mode activated!');
+        location.reload();
+      } else if (password) {
+        alert('❌ Invalid password');
+      }
+    }
+
+    // Close modal on outside click
+    window.onclick = function(event) {
+      const modal = document.getElementById('courseModal');
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+    }
+
+    // Initialize
+    loadCourseData();
+    renderCourses();
+  </script>
+</body>
+</html>

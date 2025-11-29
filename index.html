@@ -1,0 +1,439 @@
+---
+layout: default
+title: Home
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zhang Jun | Academic Portal</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --primary: #2c3e50;
+      --secondary: #3498db;
+      --accent: #e74c3c;
+      --light: #ecf0f1;
+      --text: #2c3e50;
+      --border: #bdc3c7;
+      --shadow: 0 2px 8px rgba(0,0,0,0.1);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.15);
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+      background: #f8f9fa;
+    }
+    
+    /* Navigation */
+    nav.main-nav {
+      background: white;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+    }
+    
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+      list-style: none;
+    }
+    
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    
+    .nav-links a:hover {
+      color: var(--secondary);
+    }
+    
+    .nav-links .btn-admin {
+      padding: 8px 16px;
+      background: var(--accent);
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      border: none;
+      font-weight: 500;
+      transition: background 0.3s;
+    }
+    
+    .nav-links .btn-admin:hover {
+      background: #c0392b;
+    }
+    
+    /* Hero section */
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      padding: 80px 20px;
+      text-align: center;
+    }
+    
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      margin-bottom: 20px;
+    }
+    
+    .hero-meta {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      font-size: 0.95rem;
+      margin-top: 20px;
+    }
+    
+    /* Main content */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .section {
+      background: white;
+      padding: 40px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+    
+    .section h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: var(--primary);
+      border-bottom: 3px solid var(--secondary);
+      padding-bottom: 10px;
+    }
+    
+    .section h3 {
+      font-size: 1.3rem;
+      margin: 20px 0 10px 0;
+      color: var(--text);
+    }
+    
+    .section p {
+      margin-bottom: 15px;
+      line-height: 1.8;
+    }
+    
+    .section-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .card {
+      background: var(--light);
+      padding: 20px;
+      border-radius: 6px;
+      border-left: 4px solid var(--secondary);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .card h4 {
+      color: var(--secondary);
+      margin-bottom: 10px;
+    }
+    
+    .card p {
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background: var(--secondary);
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.3s;
+      cursor: pointer;
+      border: none;
+      font-weight: 500;
+    }
+    
+    .btn:hover {
+      background: #2980b9;
+    }
+    
+    .btn-secondary {
+      background: var(--accent);
+    }
+    
+    .btn-secondary:hover {
+      background: #c0392b;
+    }
+    
+    /* Footer */
+    footer {
+      background: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+    
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+    }
+    
+    .modal-content {
+      background-color: white;
+      margin: 5% auto;
+      padding: 30px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .modal-header {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: inherit;
+    }
+    
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    .close:hover {
+      color: black;
+    }
+    
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+      
+      .nav-links {
+        gap: 15px;
+      }
+      
+      .section {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="main-nav">
+    <div class="nav-container">
+      <a href="/" class="logo">🎓 Zhang Jun</a>
+      <ul class="nav-links">
+        <li><a href="/papers.html">📄 Papers</a></li>
+        <li><a href="/courses.html">📚 Courses</a></li>
+        <li><a href="/forum.html">💬 Forum</a></li>
+        <li><a href="/lab.html">🔬 Lab</a></li>
+        <li><a href="/company.html">🏢 Company</a></li>
+        <li><button class="btn-admin" onclick="openAdminModal()">🔐 Admin</button></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>Zhang Jun</h1>
+    <p>Associate Professor of Computer Science</p>
+    <div class="hero-meta">
+      <span>🏫 MIT CSAIL</span>
+      <span>📧 zjun@mit.edu</span>
+      <span>🔗 GitHub • Twitter • LinkedIn</span>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- About Section -->
+    <section class="section">
+      <h2>About Me</h2>
+      <p>
+        I am an Associate Professor in the Computer Science and Artificial Intelligence Laboratory (CSAIL) at MIT. 
+        My research focuses on artificial intelligence, machine learning, and their applications in scientific computing.
+      </p>
+      <p>
+        I received my Ph.D. in Computer Science from Stanford University in 2018, where I was advised by Prof. Andrew Ng. 
+        Prior to joining MIT, I was a postdoctoral researcher at UC Berkeley.
+      </p>
+      <h3>Research Interests</h3>
+      <ul style="margin-left: 20px;">
+        <li>Machine Learning and Deep Learning</li>
+        <li>Natural Language Processing</li>
+        <li>Computer Vision</li>
+        <li>Federated Learning and Privacy</li>
+        <li>AI for Scientific Discovery</li>
+      </ul>
+    </section>
+
+    <!-- Highlights -->
+    <section class="section">
+      <h2>Research Highlights</h2>
+      <div class="section-grid">
+        <div class="card">
+          <h4>🏆 Featured Work</h4>
+          <p>Published 30+ papers in top-tier venues including NeurIPS, ICML, and ICCV.</p>
+          <a href="/papers.html" class="btn">View Papers</a>
+        </div>
+        <div class="card">
+          <h4>📚 Teaching</h4>
+          <p>Teaching "Advanced Topics in Machine Learning" and mentoring PhD students.</p>
+          <a href="/courses.html" class="btn">View Courses</a>
+        </div>
+        <div class="card">
+          <h4>🤝 Collaboration</h4>
+          <p>Collaborating with leading research institutions worldwide.</p>
+          <a href="/forum.html" class="btn">Join Discussion</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- News Section -->
+    <section class="section">
+      <h2>Latest News</h2>
+      <div class="card" style="margin-bottom: 10px;">
+        <h4>🎉 New Paper Accepted</h4>
+        <p>Our paper on "Efficient Federated Learning" has been accepted to NeurIPS 2024.</p>
+      </div>
+      <div class="card" style="margin-bottom: 10px;">
+        <h4>👥 New Lab Members</h4>
+        <p>Welcome to our research group! We've onboarded 3 new PhD students this semester.</p>
+      </div>
+      <div class="card">
+        <h4>📖 Course Launch</h4>
+        <p>Started offering "Quantum Machine Learning" course for Spring 2025.</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Zhang Jun. All rights reserved. | Last updated: January 2025</p>
+  </footer>
+
+  <!-- Admin Modal -->
+  <div id="adminModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeAdminModal()">&times;</span>
+      <div class="modal-header">🔐 Admin Access</div>
+      
+      <form onsubmit="handleAdminLogin(event)">
+        <div class="form-group">
+          <label for="adminPassword">Password:</label>
+          <input type="password" id="adminPassword" placeholder="Enter admin password" required>
+        </div>
+        <button type="submit" class="btn" style="width: 100%;">Login</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function openAdminModal() {
+      document.getElementById('adminModal').style.display = 'block';
+    }
+    
+    function closeAdminModal() {
+      document.getElementById('adminModal').style.display = 'none';
+    }
+    
+    function handleAdminLogin(event) {
+      event.preventDefault();
+      const password = document.getElementById('adminPassword').value;
+      
+      if (password === 'Philo518sophy') {
+        localStorage.setItem('adminMode', 'true');
+        alert('✅ Admin mode activated!');
+        closeAdminModal();
+        location.href = '/admin.html';
+      } else {
+        alert('❌ Invalid password');
+        document.getElementById('adminPassword').value = '';
+      }
+    }
+    
+    window.onclick = function(event) {
+      const modal = document.getElementById('adminModal');
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+    }
+  </script>
+</body>
+</html>
+
+
